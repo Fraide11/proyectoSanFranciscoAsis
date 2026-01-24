@@ -1,0 +1,30 @@
+# Dependencias (esta es la más importante)
+node_modules/
+jspm_packages/
+
+# Archivos de configuración personal / Secretos
+.env
+.env.test
+.env.local
+.env.production
+
+# Logs de error
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Carpetas de salida (Build/Dist)
+dist/
+build/
+out/
+
+# Archivos del Sistema Operativo
+Thumbs.db
+.DS_Store
+
+# IDEs y Editores
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
