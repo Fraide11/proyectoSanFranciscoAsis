@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Envío</title>
+</head>
+<body>
+    
+    <h1>prueba de envio</h1>
+
+    <form name="choco">
+        <input type="text" name="choco" id="coco" placeholder="Escribe algo aquí...">
+        <input type="submit" value="Enviar a Atlas">
+    </form>
+
+    <script>
+        const formulario = document.querySelector('form[name="choco"]');
+
+        formulario.addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+
+            // ¡ESTO DEBE ESTAR AQUÍ DENTRO! 
+            // Para que lea lo que escribiste JUSTO cuando le das al botón.
+            const datoParaEnviar = document.getElementById('coco').value;
+
+            try {
+                const respuesta = await fetch('http://localhost:3000/api/caja', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ choco: datoParaEnviar }) 
+                });
+
+                const resultado = await respuesta.json();
+                console.log('Servidor respondió:', resultado);
+                alert('¡Dato enviado con éxito!');
+                
+                // Opcional: limpiar el cuadro después de enviar
+                document.getElementById('coco').value = "";
+                
+            } catch (error) {
+                console.error("Error al enviar:", error);
+            }
+        });
+    </script>
+</body>
+</html>
