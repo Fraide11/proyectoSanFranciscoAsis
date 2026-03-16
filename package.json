@@ -1,16 +1,40 @@
 {
   "name": "proyecto",
   "version": "1.0.0",
-  "description": "Servidor de mi empresa",
-  "main": "server.js",
+  "description": "Sistema integral de gestión de inventario, ventas y administración para la venta de autopartes. Desarrollado con el **Stack MEN** (MongoDB, Express, Node.js).",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fraide11/pruebaCrud.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Fraide11/pruebaCrud/issues"
+  },
+  "homepage": "https://github.com/Fraide11/pruebaCrud#readme",
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "mongodb": "^7.0.0",
-    "mongoose": "^8.9.5"
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.13.6",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "form-data": "^4.0.5",
+    "groq-sdk": "^1.1.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.2.1",
+    "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
+    "nodemon": "^3.1.14",
+    "pdfkit": "^0.17.2"
   }
 }

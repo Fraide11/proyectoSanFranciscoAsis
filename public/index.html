@@ -1,47 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba de Envío</title>
+    <title>Auto-Repuestos San Francisco - Registro</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        .form-container { background: white; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; }
+        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; }
+        button { background: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+    </style>
 </head>
 <body>
-    
-    <h1>prueba de envio</h1>
 
-    <form name="choco">
-        <input type="text" name="choco" id="coco" placeholder="Escribe algo aquí...">
-        <input type="submit" value="Enviar a Atlas">
+<div class="form-container">
+    <h2>Registrar Nuevo Repuesto</h2>
+    <form id="formRepuesto">
+        <input type="text" id="codigo" placeholder="Código / SKU" required>
+        <input type="text" id="nombre" placeholder="Nombre del repuesto" required>
+        <input type="text" id="marcaCarro" placeholder="Marca (ej: Toyota)" required>
+        <input type="text" id="modeloCarro" placeholder="Modelo (ej: Corolla)" required>
+        <input type="number" id="precioVenta" placeholder="Precio de Venta" required>
+        <input type="number" id="stock" placeholder="Stock Inicial" required>
+        <button type="submit">Guardar Repuesto</button>
     </form>
+    <p id="mensaje"></p>
+</div>
 
-    <script>
-        const formulario = document.querySelector('form[name="choco"]');
+<script>
+    document.getElementById('formRepuesto').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const data = {
+            codigo: document.getElementById('codigo').value,
+            nombre: document.getElementById('nombre').value,
+            marcaCarro: document.getElementById('marcaCarro').value,
+            modeloCarro: document.getElementById('modeloCarro').value,
+            precioVenta: document.getElementById('precioVenta').value,
+            stock: document.getElementById('stock').value
+        };
 
-        formulario.addEventListener('submit', async (e) => {
-            e.preventDefault(); 
+        try {
+            const response = await fetch('/api/repuestos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
-            // ¡ESTO DEBE ESTAR AQUÍ DENTRO! 
-            // Para que lea lo que escribiste JUSTO cuando le das al botón.
-            const datoParaEnviar = document.getElementById('coco').value;
-
-            try {
-                const respuesta = await fetch('http://localhost:3000/api/caja', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ choco: datoParaEnviar }) 
-                });
-
-                const resultado = await respuesta.json();
-                console.log('Servidor respondió:', resultado);
-                alert('¡Dato enviado con éxito!');
-                
-                // Opcional: limpiar el cuadro después de enviar
-                document.getElementById('coco').value = "";
-                
-            } catch (error) {
-                console.error("Error al enviar:", error);
+            const resData = await response.json();
+            if (response.ok) {
+                document.getElementById('mensaje').innerText = "✅ ¡Guardado con éxito!";
+                document.getElementById('formRepuesto').reset();
+            } else {
+                document.getElementById('mensaje').innerText = "❌ Error: " + resData.message;
             }
-        });
-    </script>
+        } catch (error) {
+            console.error("Error al conectar:", error);
+        }
+    });
+</script>
 </body>
 </html>
