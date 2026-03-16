@@ -41,7 +41,7 @@ cron.schedule('0 0 * * *', async () => {
     }
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
     console.log(`🚀 Servidor volando en puerto ${PORT}`);
     console.log(`🛠️  Listo para San Francisco de Asís`);
