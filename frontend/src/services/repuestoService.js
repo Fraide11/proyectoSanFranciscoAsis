@@ -1,10 +1,10 @@
 // frontend/src/services/repuestoService.js
-const API_URL = 'http://localhost:5000/api/repuestos';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://proyectosanfranciscoasis.onrender.com/api';
+const API_URL = `${BASE_URL}/repuestos`;
 
 export const getRepuestos = async (busqueda = "") => {
     try {
         const response = await fetch(`${API_URL}?query=${busqueda}`);
-        // Verificamos si la respuesta es ok
         if (!response.ok) throw new Error("Error en la petición");
         return await response.json();
     } catch (error) {

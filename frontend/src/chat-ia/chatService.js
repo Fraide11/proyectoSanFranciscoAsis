@@ -1,15 +1,15 @@
+// frontend/src/services/chatService.js
 import axios from 'axios';
 
-// Asegúrate de que este puerto sea el que usa tu backend (normalmente 5000)
-const API_URL = 'http://localhost:5000/api/chat'; 
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://proyectosanfranciscoasis.onrender.com/api';
+const API_URL = `${BASE_URL}/chat`;
 
 export const sendMessageToAI = async (message) => {
     try {
         const response = await axios.post(API_URL, { prompt: message });
-        // Retornamos la respuesta que viene del backend
         return response.data.reply; 
     } catch (error) {
-        console.error("Error en ChatService:", error);
+        console.error("Error en Luna Chat:", error);
         throw error;
     }
 };

@@ -44,7 +44,7 @@ const AdminPanel = () => {
         };
         
         // 3. Petición al Backend
-        await axios.post('http://localhost:5000/api/repuestos', nuevoRepuesto);
+        await axios.post('https://proyectosanfranciscoasis.onrender.com/api/repuestos', nuevoRepuesto);
         
         alert("¡Registro exitoso en San Francisco de Asís! 🛠️");
         
