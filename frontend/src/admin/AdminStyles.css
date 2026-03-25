@@ -58,3 +58,42 @@
   align-items: center;
   margin-bottom: 30px;
 }
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+}
+
+.msg-ok { color: #2ecc71; font-weight: bold; }
+.msg-error { color: #e74c3c; font-weight: bold; }
+
+.btn-save {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-save:hover { background-color: #2980b9; }
+
+.card-producto {
+    position: relative;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+
+/* Resaltamos la tarjeta si eres admin para que sepas que puedes editar */
+.admin-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 5px;
+    border-top: 1px dashed #ccc;
+    padding-top: 10px;
+}
+
+.btn-edit { background: #f39c12; color: white; border: none; padding: 5px; cursor: pointer; }
+.btn-delete { background: #e74c3c; color: white; border: none; padding: 5px; cursor: pointer; }

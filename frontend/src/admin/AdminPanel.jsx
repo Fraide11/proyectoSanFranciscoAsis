@@ -28,6 +28,11 @@ const AdminPanel = () => {
     e.preventDefault();
     if (!archivo) return alert("Por favor, selecciona una foto del repuesto");
 
+// Dentro de tu switch o condicional de vistas en AdminPanel.jsx
+{view === 'workers' && user.rol === 'admin' && (
+    <WorkerManagement />
+)}
+
     setLoading(true);
     try {
       // 1. Subida a ImgBB

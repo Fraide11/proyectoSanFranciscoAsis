@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import { getRepuestos } from '../services/repuestoService';
+import { CartContext } from '../context/CartContext';
 
 const Catalogo = () => {
     const [repuestos, setRepuestos] = useState([]);
