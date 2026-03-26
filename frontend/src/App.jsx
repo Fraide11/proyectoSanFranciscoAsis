@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import ChatContainer from './chat-ia/chatContainer';
 import AdminPanel from './admin/AdminPanel'; 
 import { getRepuestos, deleteRepuesto, updateRepuesto } from './services/repuestoService';
 import './App.css'; 
+
+// --- COMPONENTE DE PROTECCIÓN DE RUTAS ---
+const ProtectedRoute = ({ children, esAdmin }) => {
+  if (!esAdmin) return <Navigate to="/" />;
+  return children;
+};
 
 function App() {
   // --- ESTADOS ---
@@ -12,7 +19,7 @@ function App() {
   const [carrito, setCarrito] = useState([]);
   const [carritoAbierto, setCarritoAbierto] = useState(false);
   const [chatAbierto, setChatAbierto] = useState(false);
-  const [esAdmin, setEsAdmin] = useState(false);
+  const [esAdmin, setEsAdmin] = useState(false); // En el futuro esto vendrá del AuthContext
 
   // --- CARGA DE DATOS ---
   useEffect(() => {
@@ -55,7 +62,6 @@ function App() {
   };
 
   const handleEdit = (producto) => {
-    // Abrimos el modal en modo edición
     setDetallesSeleccionados({ ...producto, editando: true });
   };
 
@@ -85,17 +91,17 @@ function App() {
       backgroundAttachment: 'fixed', fontFamily: 'sans-serif'
     }}>
       
-      {/* BOTÓN SECRETO ADMIN */}
+      {/* BOTÓN SECRETO ADMIN (Para la demo de mañana) */}
       <button 
         onClick={() => setEsAdmin(!esAdmin)}
-        style={{ position: 'absolute', top: '10px', left: '10px', opacity: 0.3, background: 'none', border: 'none', color: 'white', cursor: 'pointer', zIndex: 1000 }}
+        style={{ position: 'fixed', top: '10px', left: '10px', opacity: 0.3, background: 'none', border: 'none', color: 'white', cursor: 'pointer', zIndex: 1000 }}
       >
         {esAdmin ? "Ver Tienda" : "⚙️"}
       </button>
 
       {/* NAVBAR */}
       <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', padding: '15px 25px', background: 'rgba(0,0,0,0.3)', borderRadius: '15px', backdropFilter: 'blur(5px)' }}>
-        <h2 style={{ margin: 0, fontSize: '1.4rem', color: '#00d4ff' }}>🛠️ San Francisco {esAdmin && "(Admin)"}</h2>
+        <h2 style={{ margin: 0, fontSize: '1.4rem', color: '#00d4ff' }}>🛠️ Automotriz San Francisco {esAdmin && "(Panel Admin)"}</h2>
         <div onClick={() => setCarritoAbierto(true)} style={{ position: 'relative', cursor: 'pointer', padding: '5px' }}>
           <span style={{ fontSize: '1.8rem' }}>🛒</span>
           {carrito.length > 0 && (
@@ -106,18 +112,20 @@ function App() {
         </div>
       </nav>
 
-      {/* PANEL DE CREACIÓN (Solo Admin) */}
-      {esAdmin && (
-        <div style={{ marginBottom: '30px' }}>
+      {/* CONTENIDO PRINCIPAL */}
+      {esAdmin ? (
+        <div style={{ animation: 'fadeIn 0.5s' }}>
           <AdminPanel onUpdate={cargarDatos} />
+          <h3 style={{marginTop: '40px', color: '#00d4ff'}}>Gestión de Inventario Existente</h3>
+          {/* Aquí podrías poner una tabla más compacta para el admin si quisieras */}
         </div>
-      )}
+      ) : null}
 
       {/* BUSCADOR */}
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '40px' }}>
         <input 
           type="text" 
-          placeholder="Busca por nombre, marca o código..." 
+          placeholder="Busca repuestos por nombre, marca o código..." 
           value={busqueda} 
           onChange={(e) => setBusqueda(e.target.value)}
           style={{ padding: '15px 25px', width: '100%', maxWidth: '500px', borderRadius: '30px', border: 'none', outline: 'none', fontSize: '1rem', boxShadow: '0 4px 15px rgba(0,0,0,0.4)', color: '#333' }}
@@ -144,10 +152,9 @@ function App() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <button onClick={() => setDetallesSeleccionados(item)} style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #646cff', background: 'transparent', color: 'white', cursor: 'pointer' }}>Detalles</button>
-                  <button onClick={() => añadirAlCarrito(item)} style={{ flex: 1, padding: '10px', borderRadius: '8px', border: 'none', background: '#646cff', color: 'white', cursor: 'pointer', fontWeight: 'bold' }}>+ Carrito</button>
+                  {!esAdmin && <button onClick={() => añadirAlCarrito(item)} style={{ flex: 1, padding: '10px', borderRadius: '8px', border: 'none', background: '#646cff', color: 'white', cursor: 'pointer', fontWeight: 'bold' }}>+ Carrito</button>}
                 </div>
                 
-                {/* BOTONES CRUD (Admin) */}
                 {esAdmin && (
                   <div style={{ display: 'flex', gap: '8px', marginTop: '5px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '10px' }}>
                     <button onClick={() => handleEdit(item)} style={{ flex: 1, background: '#f39c12', border: 'none', borderRadius: '8px', color: 'white', padding: '8px', cursor: 'pointer' }}>✏️ Editar</button>
@@ -159,7 +166,7 @@ function App() {
         ))}
       </div>
 
-      {/* CARRITO LATERAL (DRAWER) */}
+      {/* CARRITO LATERAL */}
       {carritoAbierto && (
         <div style={{ position: 'fixed', top: 0, right: 0, width: '320px', height: '100%', background: '#1a1a2e', zIndex: 5000, boxShadow: '-5px 0 15px rgba(0,0,0,0.5)', padding: '20px', display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -183,7 +190,7 @@ function App() {
               <span>Total:</span>
               <span style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#4caf50' }}>${totalCarrito}</span>
             </div>
-            <button onClick={() => alert("Debes iniciar sesión para comprar")} style={{ width: '100%', padding: '15px', borderRadius: '10px', border: 'none', background: '#00d4ff', color: '#000', fontWeight: 'bold', cursor: 'pointer' }}>FINALIZAR COMPRA</button>
+            <button onClick={() => alert("Procesando pago en Automotriz...")} style={{ width: '100%', padding: '15px', borderRadius: '10px', border: 'none', background: '#00d4ff', color: '#000', fontWeight: 'bold', cursor: 'pointer' }}>FINALIZAR COMPRA</button>
           </div>
         </div>
       )}
@@ -200,13 +207,10 @@ function App() {
       {detallesSeleccionados && (
           <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 6000, backdropFilter: 'blur(5px)' }}>
             <div style={{ background: '#1a1a2e', padding: '25px', borderRadius: '25px', maxWidth: '380px', width: '90%', border: '1px solid #646cff', textAlign: 'center' }}>
-                
                 <h3 style={{ color: '#00d4ff', marginBottom: '15px' }}>
                   {detallesSeleccionados.editando ? "📝 Editar Producto" : "🔍 Detalle de Repuesto"}
                 </h3>
-
                 <img src={detallesSeleccionados.imagenUrl} style={{ width: '100%', height: '150px', objectFit: 'contain', borderRadius: '15px', marginBottom: '15px' }} alt="" />
-                
                 <div style={{ textAlign: 'left', background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '12px', marginBottom: '15px' }}>
                   <label style={{fontSize: '0.7rem', color: '#646cff'}}>Nombre</label>
                   <input 
@@ -216,7 +220,6 @@ function App() {
                     onChange={(e) => setDetallesSeleccionados({...detallesSeleccionados, nombre: e.target.value})}
                     style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: detallesSeleccionados.editando ? '1px solid #646cff' : 'none', color: 'white', marginBottom: '10px', fontSize: '0.9rem', outline: 'none' }}
                   />
-
                   <label style={{fontSize: '0.7rem', color: '#646cff'}}>Precio de Venta ($)</label>
                   <input 
                     type="number" 
@@ -225,34 +228,18 @@ function App() {
                     onChange={(e) => setDetallesSeleccionados({...detallesSeleccionados, precioVenta: Number(e.target.value)})}
                     style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: detallesSeleccionados.editando ? '1px solid #646cff' : 'none', color: '#4caf50', fontWeight: 'bold', fontSize: '1.1rem', outline: 'none' }}
                   />
-                  
-                  {!detallesSeleccionados.editando && (
-                    <>
-                      <p style={{fontSize: '0.85rem', margin: '10px 0 0'}}>🚗 Marca: {detallesSeleccionados.marcaCarro}</p>
-                      <p style={{fontSize: '0.85rem', margin: '5px 0 0'}}>🚘 Modelo: {detallesSeleccionados.modeloCarro}</p>
-                      <p style={{fontSize: '0.85rem', margin: '5px 0 0'}}>🆔 SKU: {detallesSeleccionados.codigo}</p>
-                    </>
-                  )}
                 </div>
-
                 {detallesSeleccionados.editando ? (
-                  <button onClick={() => handleSaveEdit(detallesSeleccionados)} style={{ width: '100%', padding: '12px', borderRadius: '10px', background: '#4caf50', color: 'white', fontWeight: 'bold', border: 'none', cursor: 'pointer', marginBottom: '10px' }}>
-                    GUARDAR CAMBIOS
-                  </button>
+                  <button onClick={() => handleSaveEdit(detallesSeleccionados)} style={{ width: '100%', padding: '12px', borderRadius: '10px', background: '#4caf50', color: 'white', fontWeight: 'bold', border: 'none', cursor: 'pointer', marginBottom: '10px' }}>GUARDAR CAMBIOS</button>
                 ) : (
-                  <button onClick={() => añadirAlCarrito(detallesSeleccionados)} style={{ width: '100%', padding: '12px', borderRadius: '10px', background: '#646cff', color: 'white', fontWeight: 'bold', border: 'none', cursor: 'pointer', marginBottom: '10px' }}>
-                    AÑADIR AL CARRITO
-                  </button>
+                  <button onClick={() => añadirAlCarrito(detallesSeleccionados)} style={{ width: '100%', padding: '12px', borderRadius: '10px', background: '#646cff', color: 'white', fontWeight: 'bold', border: 'none', cursor: 'pointer', marginBottom: '10px' }}>AÑADIR AL CARRITO</button>
                 )}
-
-                <button onClick={() => setDetallesSeleccionados(null)} style={{ width: '100%', padding: '10px', background: 'transparent', color: '#ccc', border: 'none', cursor: 'pointer' }}>
-                  {detallesSeleccionados.editando ? "Cancelar" : "Cerrar"}
-                </button>
+                <button onClick={() => setDetallesSeleccionados(null)} style={{ width: '100%', padding: '10px', background: 'transparent', color: '#ccc', border: 'none', cursor: 'pointer' }}>Cerrar</button>
             </div>
           </div>
       )}
     </div>
-  ); rererererer
+  );
 }
 
 export default App;
