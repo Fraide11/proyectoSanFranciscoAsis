@@ -1,5 +1,4 @@
-// frontend/src/admin/AdminLayout.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './AdminStyles.css';
 
@@ -7,23 +6,49 @@ const AdminLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Extraemos info del usuario del localStorage
-  const userRole = localStorage.getItem('userRole'); // 'admin' o 'trabajador'
-  const userName = "Fraider Figueroa"; // Esto podrías traerlo de un contexto o del token
+  // --- 1. Extracción Segura de Info ---
+  // Obtenemos los datos reales guardados en el login
+  const token = localStorage.getItem('token');
+  const userRole = localStorage.getItem('userRole'); // Debe ser 'admin' o 'vendedor'
+  const userName = localStorage.getItem('userName') || "Usuario"; // Dinámico
 
+  // --- 2. Protección de Ruta (Front-end) ---
+  // Si no hay token o rol, redirigimos al login inmediatamente. 
+  // Esto evita que alguien entre escribiendo la URL manual.
+  useEffect(() => {
+    if (!token || !userRole) {
+      navigate('/login');
+    }
+  }, [token, userRole, navigate]);
+
+  // --- 3. Lógica de Cerrar Sesión ---
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userRole');
+    // Borramos TODO el almacenamiento local para seguridad total
+    localStorage.clear(); 
     navigate('/login');
   };
 
-  // Función para verificar si la ruta está activa
+  // --- 4. UX: Resaltar Ruta Activa ---
   const isActive = (path) => location.pathname === path ? 'active' : '';
+
+  // --- 5. Título Dinámico del Header ---
+  const getHeaderTitle = () => {
+    if (location.pathname.includes('ventas')) return 'Gestión de Ventas';
+    if (location.pathname.includes('reportes')) return 'Análisis de Datos y Reportes';
+    if (location.pathname.includes('workers')) return 'Gestión de Personal';
+    return 'Gestión de Repuestos y Productos';
+  };
+
+  // Si no está logueado, no renderizamos nada mientras redirige (evita parpadeo)
+  if (!token || !userRole) return null;
 
   return (
     <div className="admin-container">
       <aside className="admin-sidebar">
-        <div className="admin-logo">⚙️ Panel {userRole === 'admin' ? 'Admin' : 'Personal'}</div>
+        {/* Usamos 'admin' y 'vendedor' para coincidir con tu Backend */}
+        <div className="admin-logo">
+          ⚙️ San Francisco {userRole === 'admin' ? '(Admin)' : '(Personal)'}
+        </div>
         
         <nav className="admin-nav">
           <Link to="/admin" className={`admin-nav-item ${isActive('/admin')}`}>
@@ -33,11 +58,13 @@ const AdminLayout = ({ children }) => {
             💰 Ventas
           </Link>
           
-          {/* SOLO EL ADMIN VE REPORTES - Según tu Diagrama UML */}
+          {/* --- CONTROL DE ACCESO (RUTAS PRIVADAS) --- */}
+          {/* Solo el Admin ve estas opciones, según el diagrama de clases */}
           {userRole === 'admin' && (
             <>
+              <div className="admin-nav-divider"></div>
               <Link to="/admin/reportes" className={`admin-nav-item ${isActive('/admin/reportes')}`}>
-                📊 Reportes
+                📊 Reportes (PDF)
               </Link>
               <Link to="/admin/workers" className={`admin-nav-item ${isActive('/admin/workers')}`}>
                 👥 Trabajadores
@@ -49,6 +76,7 @@ const AdminLayout = ({ children }) => {
         <button 
           onClick={handleLogout}
           className="admin-logout-btn"
+          title="Cerrar sesión de forma segura"
         >
           🚪 Cerrar Sesión
         </button>
@@ -56,13 +84,13 @@ const AdminLayout = ({ children }) => {
 
       <main className="admin-content">
         <header className="admin-header">
-          <h2>{location.pathname.includes('ventas') ? 'Gestión de Ventas' : 
-               location.pathname.includes('reportes') ? 'Análisis de Datos' : 
-               'Gestión de Repuestos'}</h2>
+          <h2>{getHeaderTitle()}</h2>
           
           <div className="admin-user-info">
-            <span>{userRole === 'admin' ? '🛡️' : '🔧'}</span>
+            {/* Ícono dinámico según el rol */}
+            <span className="user-icon">{userRole === 'admin' ? '🛡️' : '🔧'}</span>
             <strong>{userName}</strong>
+            <small>({userRole === 'admin' ? 'Administrador' : 'Vendedor'})</small>
           </div>
         </header>
         

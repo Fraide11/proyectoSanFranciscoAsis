@@ -1,14 +1,37 @@
 const express = require('express');
 const router = express.Router();
-const { crearRepuesto, obtenerInventario, actualizarRepuesto } = require('../controllers/inventarioController');
 
-// Ruta para ver y buscar (ej: /api/repuestos?query=corolla)
-router.get('/', obtenerInventario);
+// Controladores
+const { 
+    login, 
+    registerWorker, 
+    deleteWorker 
+} = require('../controllers/authController');
 
-// Ruta para crear
-router.post('/', crearRepuesto);
+// Middlewares de Seguridad
+const { proteger } = require('../middleware/authMiddleware');
+const autorizarRoles = require('../middleware/roleMiddleware');
 
-// Ruta para actualizar por ID
-router.put('/:id', actualizarRepuesto);
+/**
+ * 🔑 RUTAS DE AUTENTICACIÓN Y USUARIOS
+ */
+
+// 1. Login (Público) - /api/auth/login
+router.post('/login', login);
+
+// 2. Registro de Trabajadores (Solo Admin) - /api/auth/register-worker
+// Se requiere estar logueado y tener rol de administrador
+router.post('/register-worker', 
+    proteger, 
+    autorizarRoles('admin'), 
+    registerWorker
+);
+
+// 3. Eliminar Trabajador (Solo Admin) - /api/auth/worker/:id
+router.delete('/worker/:id', 
+    proteger, 
+    autorizarRoles('admin'), 
+    deleteWorker
+);
 
 module.exports = router;

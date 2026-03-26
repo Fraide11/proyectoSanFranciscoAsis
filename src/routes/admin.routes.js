@@ -1,26 +1,44 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/authMiddleware'); // Tu validación de JWT/Passport
-const checkRole = require('../middleware/roleMiddleware');
+
+// Middlewares de Seguridad
+const { proteger } = require('../middleware/authMiddleware'); 
+const autorizarRoles = require('../middleware/roleMiddleware');
+
+// Controladores
 const authController = require('../controllers/authController');
 const { obtenerStockBajo, obtenerVentasHoy } = require('../controllers/reportesController');
 
-// Solo el admin puede registrar trabajadores
+/**
+ * 🛡️ RUTAS PROTEGIDAS - NIVEL: ADMINISTRADOR
+ * Todas estas rutas requieren Token válido y Rol 'admin'
+ */
+
+// 1. Gestión de Personal (Solo Admin)
 router.post('/register-worker', 
-    authMiddleware, 
-    checkRole(['admin']), 
-    authController.registerWorker // Crea una función similar a register pero forzando rol 'trabajador'
+    proteger, 
+    autorizarRoles('admin'), 
+    authController.registerWorker 
 );
 
-// Solo el admin puede eliminar trabajadores
 router.delete('/worker/:id', 
-    authMiddleware, 
-    checkRole(['admin']), 
+    proteger, 
+    autorizarRoles('admin'), 
     authController.deleteWorker 
 );
 
-// Solo los administradores deberían poder ver esto
-router.get('/stock-bajo', obtenerStockBajo);
-router.get('/ventas-hoy', obtenerVentasHoy);
+// 2. Reportes Críticos (Solo Admin)
+// Agregamos la protección que faltaba para que no sean públicas
+router.get('/stock-bajo', 
+    proteger, 
+    autorizarRoles('admin'), 
+    obtenerStockBajo
+);
+
+router.get('/ventas-hoy', 
+    proteger, 
+    autorizarRoles('admin'), 
+    obtenerVentasHoy
+);
 
 module.exports = router;

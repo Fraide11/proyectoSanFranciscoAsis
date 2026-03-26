@@ -1,37 +1,62 @@
+import axios from 'axios';
+
+// 1. Centralizamos la URL usando la variable de entorno de Vite
 const BASE_URL = import.meta.env.VITE_API_URL || 'https://proyectosanfranciscoasis.onrender.com/api';
 const API_URL = `${BASE_URL}/repuestos`;
 
-// Helper para el token
-const getHeaders = () => ({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
+// 2. Configuramos una instancia de Axios para Repuestos
+// Esto hereda la lógica de seguridad automáticamente
+const repuestosApi = axios.create({
+    baseURL: API_URL
 });
+
+// Interceptor para inyectar el token en cada petición (indispensable para Render)
+repuestosApi.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+// --- FUNCIONES CRUD ---
 
 export const getRepuestos = async (busqueda = "") => {
     try {
-        // Usamos 'buscar' para que coincida con el controlador que te pasé antes
-        const response = await fetch(`${API_URL}?buscar=${busqueda}`); 
-        if (!response.ok) throw new Error("Error en la petición");
-        return await response.json();
+        // Usamos params de Axios para que la URL quede limpia: ?buscar=bujia
+        const response = await repuestosApi.get('/', {
+            params: { buscar: busqueda }
+        });
+        return response.data;
     } catch (error) {
-        console.error("Error al traer repuestos:", error);
-        return [];
+        console.error("Error en getRepuestos:", error.response?.data || error.message);
+        return []; // Retornamos array vacío para que el .map() de React no explote
+    }
+};
+
+export const createRepuesto = async (datos) => {
+    try {
+        const response = await repuestosApi.post('/', datos);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.msg || "Error al crear el repuesto";
+    }
+};
+
+export const updateRepuesto = async (id, datos) => {
+    try {
+        const response = await repuestosApi.put(`/${id}`, datos);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.msg || "Error al actualizar el repuesto";
     }
 };
 
 export const deleteRepuesto = async (id) => {
-    const response = await fetch(`${API_URL}/${id}`, {
-        method: 'DELETE',
-        headers: getHeaders()
-    });
-    return await response.json();
-};
-
-export const updateRepuesto = async (id, datos) => {
-    const response = await fetch(`${API_URL}/${id}`, {
-        method: 'PUT',
-        headers: getHeaders(),
-        body: JSON.stringify(datos)
-    });
-    return await response.json();
+    try {
+        const response = await repuestosApi.delete(`/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.msg || "No tienes permiso para eliminar";
+    }
 };

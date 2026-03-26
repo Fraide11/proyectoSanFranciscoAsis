@@ -3,24 +3,22 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
+// Importamos los Proveedores de Contexto
+import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 
-// ... en el render:
-<CartProvider>
-    <App />
-</CartProvider>
+// Seleccionamos el elemento root del HTML
+const container = document.getElementById('root');
+const root = createRoot(container);
 
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <CartProvider> {/* Enuelves TODA la app */}
-      <App />
-    </CartProvider>
-  </React.StrictMode>,
-)
-
-createRoot(document.getElementById('root')).render(
+root.render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    {/* 1. AuthProvider va primero para saber QUIÉN es el usuario */}
+    <AuthProvider>
+      {/* 2. CartProvider va dentro para que el carrito sepa quién compra */}
+      <CartProvider>
+        <App />
+      </CartProvider>
+    </AuthProvider>
+  </StrictMode>
+);

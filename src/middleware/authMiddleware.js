@@ -1,33 +1,51 @@
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuario');
 
-// Middleware para verificar que el usuario está logueado
+// 1. Verificar si el usuario está logueado y el token es válido
 exports.proteger = async (req, res, next) => {
     let token;
+
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
+            // Extraer el token del string "Bearer [TOKEN]"
             token = req.headers.authorization.split(' ')[1];
-            const decodificado = jwt.verify(token, process.env.JWT_SECRET || 'secret_para_desarrollo_123');
+
+            // Verificar el token
+            const decodificado = jwt.verify(token, process.env.JWT_SECRET || 'secret_san_francisco_2026');
             
-            // Buscamos al usuario y lo metemos en la petición (req.user)
-            req.user = await Usuario.findById(decodificado.user.id).select('-password');
+            // Buscamos al usuario en la DB para confirmar que sigue existiendo y está activo
+            const usuarioEncontrado = await Usuario.findById(decodificado.user.id).select('-password');
+
+            if (!usuarioEncontrado) {
+                return res.status(401).json({ msg: 'El usuario ya no existe en el sistema' });
+            }
+
+            if (!usuarioEncontrado.activo) {
+                return res.status(401).json({ msg: 'Tu cuenta ha sido desactivada. Contacta al administrador' });
+            }
+
+            // Inyectamos el usuario completo en el objeto req para usarlo en los controladores
+            req.user = usuarioEncontrado;
             next();
+
         } catch (error) {
-            return res.status(401).json({ msg: 'No autorizado, token fallido' });
+            console.error('Error en validación de token:', error.message);
+            return res.status(401).json({ msg: 'Token no válido o expirado' });
         }
     }
 
     if (!token) {
-        return res.status(401).json({ msg: 'No hay token, permiso denegado' });
+        return res.status(401).json({ msg: 'Acceso denegado, no se proporcionó un token' });
     }
 };
 
-// Middleware para permitir acceso SOLO a roles específicos (Admin o Vendedor)
+// 2. Control de acceso por Roles (RBAC)
 exports.autorizar = (...roles) => {
     return (req, res, next) => {
+        // req.user viene del middleware 'proteger', por eso siempre deben ir juntos
         if (!roles.includes(req.user.rol)) {
             return res.status(403).json({ 
-                msg: `El rol [${req.user.rol}] no tiene permiso para acceder a esta ruta` 
+                msg: `Permiso denegado: El rol [${req.user.rol}] no está autorizado para esta acción` 
             });
         }
         next();

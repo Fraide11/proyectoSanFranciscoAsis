@@ -1,69 +1,74 @@
-const Usuario = require('../models/usuario'); // Asegúrate que el nombre del archivo coincida (Mayúscula/minúscula)
-const bcrypt = require('bcryptjs');
+const Usuario = require('../models/usuario');
 const jwt = require('jsonwebtoken');
+const { registrarLog } = require('../services/auditoriaService');
 
 // @desc    Registrar un Trabajador (Vendedor)
-// @route   POST /api/auth/register-worker
 exports.registerWorker = async (req, res) => {
+    const { nombre, email, password } = req.body;
     try {
-        const { nombre, email, password } = req.body;
-
-        // 1. Verificar si ya existe
         let usuario = await Usuario.findOne({ email });
         if (usuario) {
-            return res.status(400).json({ msg: "El usuario ya existe" });
+            return res.status(400).json({ msg: "El correo ya está registrado en el sistema" });
         }
 
-        // 2. Crear nuevo trabajador 
-        // NOTA: No encriptamos aquí porque el modelo ya tiene el .pre('save')
         usuario = new Usuario({
             nombre,
             email,
             password,
-            rol: 'vendedor' // Usamos 'vendedor' que es el que pusimos en el ENUM del modelo
+            rol: 'vendedor'
         });
 
         await usuario.save();
 
-        res.json({ 
+        // AUDITORÍA: Registro de nuevo personal
+        await registrarLog(
+            req.user?.id, // ID del Admin que lo registra
+            'REGISTRO', 
+            'USUARIOS', 
+            `Registró al trabajador: ${nombre} (${email})`
+        );
+
+        res.status(201).json({ 
             msg: "Trabajador registrado exitosamente", 
-            usuario: { nombre, email, rol: usuario.rol } 
+            usuario: { id: usuario._id, nombre, email, rol: usuario.rol } 
         });
 
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send("Error al registrar trabajador");
+        console.error("Error en Registro:", err.message);
+        res.status(500).json({ msg: "Error al registrar el trabajador en la base de datos" });
     }
 };
 
 // @desc    Login de usuario
-// @route   POST /api/auth/login
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        // 1. Buscar usuario y traer el password (select +password si lo pusiste oculto)
+        // Buscamos incluyendo el password oculto
         let usuario = await Usuario.findOne({ email }).select('+password');
-        if (!usuario) {
-            return res.status(400).json({ msg: "Credenciales inválidas" });
+        
+        if (!usuario || !usuario.activo) {
+            return res.status(401).json({ msg: "Credenciales inválidas o cuenta suspendida" });
         }
 
-        // 2. Comparar usando el método que definimos en el modelo
         const isMatch = await usuario.compararPassword(password);
         if (!isMatch) {
-            return res.status(400).json({ msg: "Credenciales inválidas" });
+            return res.status(401).json({ msg: "Credenciales inválidas" });
         }
 
-        // 3. Crear JWT incluyendo el ROL
         const payload = { 
             user: { id: usuario.id, rol: usuario.rol } 
         };
 
         jwt.sign(
             payload, 
-            process.env.JWT_SECRET || 'secret_para_desarrollo_123', 
+            process.env.JWT_SECRET || 'secret_san_francisco_2026', 
             { expiresIn: '8h' }, 
-            (err, token) => {
+            async (err, token) => {
                 if (err) throw err;
+
+                // AUDITORÍA: Registro de acceso exitoso
+                await registrarLog(usuario.id, 'LOGIN', 'AUTH', `Acceso al sistema desde IP: ${req.ip}`);
+
                 res.json({ 
                     token, 
                     user: { 
@@ -75,26 +80,34 @@ exports.login = async (req, res) => {
             }
         );
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send("Error en el servidor");
+        console.error("Error en Login:", err.message);
+        res.status(500).json({ msg: "Error de conexión con el servidor" });
     }
 };
 
 // @desc    Eliminar un Trabajador
-// @route   DELETE /api/auth/worker/:id
 exports.deleteWorker = async (req, res) => {
     try {
         const worker = await Usuario.findById(req.params.id);
         
-        // Verificamos que sea un trabajador/vendedor y no un admin
         if (!worker || worker.rol === 'admin') {
-            return res.status(404).json({ msg: "Trabajador no encontrado o no autorizado" });
+            return res.status(403).json({ msg: "Operación no permitida o trabajador inexistente" });
         }
 
+        const nombreEliminado = worker.nombre;
         await Usuario.findByIdAndDelete(req.params.id);
-        res.json({ msg: "Trabajador eliminado correctamente" });
+
+        // AUDITORÍA: Registro de baja de personal
+        await registrarLog(
+            req.user.id, 
+            'ELIMINAR', 
+            'USUARIOS', 
+            `Eliminó la cuenta del trabajador: ${nombreEliminado}`
+        );
+
+        res.json({ msg: `El trabajador ${nombreEliminado} ha sido eliminado` });
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send("Error al eliminar");
+        console.error("Error en Delete Worker:", err.message);
+        res.status(500).json({ msg: "Error al procesar la baja" });
     }
 };

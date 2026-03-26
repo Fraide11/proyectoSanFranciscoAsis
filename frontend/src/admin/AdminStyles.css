@@ -1,99 +1,39 @@
-/* src/admin/AdminStyles.css */
+/* Ejemplo básico para que el layout funcione */
 .admin-container {
-  display: flex;
-  min-height: 100vh;
-  background-color: #0a0a12;
-  color: #e0e0e0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .admin-sidebar {
-  width: 260px;
-  background: rgba(20, 20, 35, 0.95);
-  border-right: 1px solid #302b63;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.admin-logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #00d4ff;
-  margin-bottom: 40px;
-  text-align: center;
-  border-bottom: 1px solid #333;
-  padding-bottom: 15px;
-}
-
-.admin-nav {
-  flex: 1;
-}
-
-.admin-nav-item {
-  display: block;
-  padding: 12px 15px;
-  color: #bbb;
-  text-decoration: none;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  transition: all 0.3s;
-}
-
-.admin-nav-item:hover, .admin-nav-item.active {
-  background: #646cff;
-  color: white;
-  box-shadow: 0 4px 15px rgba(100, 108, 255, 0.3);
+    width: 260px;
+    background-color: #1a1a2e; /* Fondo oscuro */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-right: 1px solid rgba(255,255,255,0.1);
 }
 
 .admin-content {
-  flex: 1;
-  padding: 40px;
-  overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f7f6; /* Fondo claro para contraste o el gradiente oscuro si prefieres */
+    overflow-y: auto;
 }
 
 .admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
-.admin-form {
+    background-color: white;
+    padding: 15px 30px;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 400px;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.msg-ok { color: #2ecc71; font-weight: bold; }
-.msg-error { color: #e74c3c; font-weight: bold; }
-
-.btn-save {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 4px;
+.admin-nav-item.active {
+    background-color: rgba(0, 212, 255, 0.1); /* Color acento */
+    color: #00d4ff;
+    border-radius: 8px;
 }
-
-.btn-save:hover { background-color: #2980b9; }
-
-.card-producto {
-    position: relative;
-    border: 1px solid #ddd;
-    padding: 15px;
-}
-
-/* Resaltamos la tarjeta si eres admin para que sepas que puedes editar */
-.admin-actions {
-    margin-top: 10px;
-    display: flex;
-    gap: 5px;
-    border-top: 1px dashed #ccc;
-    padding-top: 10px;
-}
-
-.btn-edit { background: #f39c12; color: white; border: none; padding: 5px; cursor: pointer; }
-.btn-delete { background: #e74c3c; color: white; border: none; padding: 5px; cursor: pointer; }
