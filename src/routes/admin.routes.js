@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Middlewares de Seguridad
-const { proteger } = require('../middleware/authMiddleware'); 
+const { proteger, autorizar } = require('../middleware/authMiddleware.js');
 const autorizarRoles = require('../middleware/roleMiddleware');
 
 // Controladores
