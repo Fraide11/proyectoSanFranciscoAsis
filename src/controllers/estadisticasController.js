@@ -1,4 +1,4 @@
-const Venta = require('../models/Venta'); // Asegúrate de que el nombre coincida con tu modelo
+const Venta = require('../models/venta'); // Asegúrate de que el nombre coincida con tu modelo
 
 exports.obtenerVentasPorDia = async (req, res) => {
     try {
