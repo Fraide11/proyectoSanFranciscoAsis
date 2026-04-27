@@ -38,12 +38,18 @@ function App() {
     }
   };
 
-  // 4. FILTRADO (Se puede hacer en el backend o aquí)
-  const filtrados = repuestos.filter(item => 
-    item.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-    item.marcaCarro.toLowerCase().includes(busqueda.toLowerCase())
-  );
+ // 4. FILTRADO (Seguro contra valores undefined/null)
+  const filtrados = repuestos.filter(item => {
+    // Si el item no existe, lo ignoramos
+    if (!item) return false;
 
+    const nombre = item.nombre ? item.nombre.toLowerCase() : "";
+    const marca = item.marcaCarro ? item.marcaCarro.toLowerCase() : "";
+    const busq = busqueda.toLowerCase();
+
+    return nombre.includes(busq) || marca.includes(busq);
+  });
+  
   return (
     <div className="main-app-container">
       

@@ -3,17 +3,16 @@ const Repuesto = require('../models/repuesto');
 const { registrarLog } = require('./auditoriaController');
 const { generarFacturaPDF } = require('../services/pdfServices');
 
-// @desc    Registrar una nueva venta y actualizar stock
-// @route   POST /api/ventas
+// @desc    Registrar una nueva venta y descontar stock
 const registrarVenta = async (req, res) => {
     try {
         const { cliente, items, total, metodoPago } = req.body; 
-        const vendedorId = req.user ? req.user._id : req.body.vendedorId; 
+        
+        const usuarioAccionId = req.user ? req.user.id : req.body.vendedorId; 
 
-        // 1. Validar stock para cada repuesto antes de procesar
+        // 1. Validar stock
         for (const item of items) {
             const repuesto = await Repuesto.findById(item.repuestoId);
-            
             if (!repuesto) {
                 return res.status(404).json({ message: `Repuesto no encontrado: ${item.repuestoId}` });
             }
@@ -24,49 +23,58 @@ const registrarVenta = async (req, res) => {
             }
         }
 
-        // 2. Si todo está bien, crear la venta
+        // 2. Crear la venta
         const nuevaVenta = new Venta({
-            vendedor: vendedorId,
-            cliente,
-            items,
+            vendedor: (req.user?.rol === 'trabajador' || req.user?.rol === 'admin') ? req.user.id : null,
+            cliente: {
+                usuarioId: req.user?.rol === 'cliente' ? req.user.id : null,
+                nombre: cliente.nombre,
+                telefono: cliente.telefono,
+                cedulaRif: cliente.cedula 
+            },
+            items: items.map(item => ({
+                repuestoId: item.repuestoId,
+                nombreCapturado: item.nombre, 
+                cantidad: item.cantidad,
+                precioUnitario: item.precioUnitario,
+                subtotal: item.cantidad * item.precioUnitario
+            })),
             total,
             metodoPago,
+            estado: 'Completada',
             fecha: new Date()
         });
 
         await nuevaVenta.save();
 
-        // 3. Restar el stock en la base de datos
+        // 3. Restar stock
         for (const item of items) {
             await Repuesto.findByIdAndUpdate(item.repuestoId, {
                 $inc: { stock: -item.cantidad } 
             });
         }
 
-        // 4. REGISTRO EN AUDITORÍA
+        // 4. Auditoría
         await registrarLog(
-            vendedorId,
+            usuarioAccionId,
             'CREAR_VENTA',
             'VENTAS',
-            `Venta # ${nuevaVenta._id} procesada. Total: ${total}. Cliente: ${cliente.nombre || 'N/A'}`
+            `Venta registrada - Total: ${total}. Cliente: ${cliente.nombre}`
         );
 
-        // 5. GENERACIÓN DE FACTURA PDF
+        // 5. PDF
         try {
             const pdfPath = await generarFacturaPDF(nuevaVenta);
-            console.log('Factura generada en:', pdfPath);
-            
             return res.status(201).json({ 
                 status: 'success', 
-                message: 'Venta realizada y factura generada', 
+                message: 'Venta realizada con éxito', 
                 venta: nuevaVenta,
                 pdf: pdfPath 
             });
         } catch (pdfError) {
-            console.error('Error al generar PDF:', pdfError);
             return res.status(201).json({ 
                 status: 'success', 
-                message: 'Venta realizada, pero hubo un error con el PDF', 
+                message: 'Venta realizada, error en PDF', 
                 venta: nuevaVenta 
             });
         }
@@ -76,4 +84,41 @@ const registrarVenta = async (req, res) => {
     }
 };
 
-module.exports = { registrarVenta };
+// @desc    Obtener estadísticas de ventas agrupadas por día
+const obtenerEstadisticasVentas = async (req, res) => {
+    try {
+        const stats = await Venta.aggregate([
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$fecha" } },
+                    totalVenta: { $sum: "$total" },
+                    cantidadOperaciones: { $sum: 1 }
+                }
+            },
+            { $sort: { "_id": 1 } }
+        ]);
+        res.json(stats); 
+    } catch (error) {
+        res.status(500).json({ msg: "Error al agrupar ventas", detalle: error.message });
+    }
+};
+
+// @desc    Generar y descargar factura
+const exportarFactura = async (req, res) => {
+    try {
+        const venta = await Venta.findById(req.params.id);
+        if (!venta) return res.status(404).json({ mensaje: "Venta no encontrada" });
+
+        const filePath = await generarFacturaPDF(venta);
+        res.download(filePath);
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al exportar factura", error: error.message });
+    }
+};
+
+// EXPORTACIÓN ÚNICA Y LIMPIA
+module.exports = { 
+    registrarVenta, 
+    exportarFactura,
+    obtenerEstadisticasVentas
+};

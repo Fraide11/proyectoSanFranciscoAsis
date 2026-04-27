@@ -1,39 +1,267 @@
-/* Ejemplo básico para que el layout funcione */
-.admin-container {
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
+/* ============================================================
+   ESTILOS MAESTROS - AUTOMOTRIZ SAN FRANCISCO (V2)
+   ============================================================ */
+
+/* --- CONFIGURACIÓN BASE --- */
+* {
+    box-sizing: border-box;
 }
 
-.admin-sidebar {
-    width: 260px;
-    background-color: #1a1a2e; /* Fondo oscuro */
+.admin-layout-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background-color: #050510;
     color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- SIDEBAR V2 (ANCHO FIJO OPTIMIZADO) --- */
+.admin-sidebar-v2 {
+    width: 200px; /* Reducido para maximizar área de trabajo */
+    min-width: 200px;
+    background-color: #0f0c29;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     flex-direction: column;
     padding: 20px;
-    border-right: 1px solid rgba(255,255,255,0.1);
+    position: fixed; /* Mantiene la sidebar fija al hacer scroll */
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+    transition: all 0.3s ease;
 }
 
-.admin-content {
+.admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0 30px 5px;
+}
+
+.brand-logo { font-size: 1.5rem; }
+.brand-text span { display: block; font-weight: bold; color: #00d4ff; font-size: 1rem; }
+.brand-text small { color: #555; letter-spacing: 1px; font-weight: 600; font-size: 0.7rem; }
+
+/* --- MENÚ DE NAVEGACIÓN --- */
+.admin-menu { flex-grow: 1; margin-top: 10px; }
+
+.menu-label {
+    font-size: 0.65rem;
+    color: #444;
+    text-transform: uppercase;
+    margin: 20px 0 10px 5px;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #a0a0c0;
+    text-decoration: none;
+    padding: 10px 12px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.menu-item:hover, .menu-item.active {
+    background-color: rgba(0, 212, 255, 0.1);
+    color: #00d4ff;
+}
+
+.menu-item .icon { font-size: 1.1rem; }
+
+/* --- PANEL DE CONTENIDO --- */
+.admin-main-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: #f4f7f6; /* Fondo claro para contraste o el gradiente oscuro si prefieres */
-    overflow-y: auto;
+    margin-left: 10px; /* Debe coincidir con el ancho de la sidebar */
+    width: calc(100% - 200px);
+    min-height: 100vh;
 }
 
-.admin-header {
-    background-color: white;
+.admin-topbar {
+    background-color: #0f0c29;
     padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 90;
 }
 
-.admin-nav-item.active {
-    background-color: rgba(0, 212, 255, 0.1); /* Color acento */
+.topbar-left h1 { font-size: 1.2rem; margin: 0; font-weight: 500; color: #fff; }
+
+/* --- PERFIL DE USUARIO --- */
+.user-profile-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 5px 5px 5px 15px;
+    border-radius: 50px;
+}
+
+.user-info-text { display: flex; flex-direction: column; text-align: right; }
+.user-name { font-size: 0.85rem; font-weight: 600; }
+.user-role-label { font-size: 0.65rem; color: #00d4ff; text-transform: uppercase; }
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #00d4ff, #005f73);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #000;
+    font-size: 0.8rem;
+}
+
+/* --- ÁREA DINÁMICA --- */
+.admin-page-content {
+    padding: 30px;
+    background-color: #050510;
+}
+
+/* --- MÓDULO DE FORMULARIOS --- */
+.worker-container {
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.form-registro {
+    background-color: #0f0c29;
+    padding: 35px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 0.8rem;
     color: #00d4ff;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.form-group input, 
+.form-group select {
+    background: #050510;
+    border: 1px solid #1a1a3a;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: 0.3s;
+}
+
+.form-group input:focus, 
+.form-group select:focus {
+    border-color: #00d4ff;
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
+}
+
+.btn-confirmar {
+    width: 100%;
+    padding: 15px;
+    background: #00d4ff;
+    color: #050510;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.btn-confirmar:hover {
+    background: #00f2ff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+}
+
+.audit-notice {
+    margin-top: 25px;
+    padding: 12px;
+    background: rgba(255, 165, 0, 0.05);
+    border-left: 3px solid #ffa500;
+    border-radius: 4px;
+    color: #ccc;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logout-btn-v2 {
+    background: transparent;
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    color: #ff4d4d;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.3s;
+    margin-top: auto; /* Empuja el botón al fondo de la sidebar */
+}
+
+/* --- MOBILE LOGIC --- */
+.mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    background: #00d4ff;
+    color: #050510;
+    border: none;
+    padding: 8px 12px;
     border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+@media (max-width: 992px) {
+    .mobile-toggle { display: block; }
+
+    .admin-sidebar-v2 {
+        left: -200px;
+        position: fixed;
+    }
+
+    .admin-sidebar-v2.open {
+        left: 0;
+    }
+
+    .admin-main-panel {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .admin-topbar { padding-left: 70px; }
+    
+    .user-info-text { display: none; }
 }

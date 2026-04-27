@@ -1,60 +1,68 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const UsuarioSchema = new mongoose.Schema({
-    nombre: {
-        type: String,
-        required: [true, 'Por favor agregue un nombre'],
-        trim: true
+    nombre: { 
+        type: String, 
+        required: [true, 'El nombre de usuario es obligatorio'], 
+        trim: true 
     },
-    email: {
-        type: String,
-        required: [true, 'Por favor agregue su correo'],
-        unique: true,
-        lowercase: true, // Siempre se guarda en minúsculas
+    email: { 
+        type: String, 
+        required: [true, 'El correo electrónico es obligatorio'], 
+        unique: true, 
+        lowercase: true, 
         trim: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Por favor agregue un correo válido']
     },
-    password: {
-        type: String,
-        required: [true, 'Por favor agregue una contraseña'],
-        minlength: [6, 'La contraseña debe tener al menos 6 caracteres'],
-        select: false // No se incluye en las consultas por defecto
+    password: { 
+        type: String, 
+        required: [true, 'La clave es obligatoria'], 
+        minlength: [6, 'La clave debe tener al menos 6 caracteres'], 
+        select: false 
     },
-    rol: {
-        type: String,
+    rol: { 
+        type: String, 
         enum: {
-            values: ['admin', 'vendedor', 'cliente'],
+            values: ['admin', 'trabajador', 'cliente'],
             message: '{VALUE} no es un rol válido'
-        },
-        default: 'cliente'
+        }, 
+        default: 'cliente' 
     },
-    activo: { // Útil para "suspender" cuentas sin borrarlas
-        type: Boolean,
-        default: true
-    }
+    activo: { 
+        type: Boolean, 
+        default: true 
+    },
+    // Campos para recuperación de contraseña
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 }, { 
     timestamps: true,
     versionKey: false 
 });
 
-// Encriptar contraseña antes de guardar
-UsuarioSchema.pre('save', async function (next) {
-    // Si la contraseña no ha sido modificada, pasamos al siguiente middleware
-    if (!this.isModified('password')) return next();
+/**
+ * Middleware para encriptar clave antes de guardar
+ */
+UsuarioSchema.pre('save', async function () {
+    // Si la clave no se modificó, no hacemos nada y Mongoose sigue solo
+    if (!this.isModified('password')) return;
     
     try {
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
-        next();
+        // NO llamar a next() aquí si la función es async
     } catch (error) {
-        next(error);
+        // Si hay error, lanzamos el error y Mongoose lo captura
+        throw error;
     }
 });
 
-// Método para comparar contraseñas en el Login
+/**
+ * Método para comparar claves en el Login
+ */
 UsuarioSchema.methods.compararPassword = async function(passwordIngresada) {
-    // Como password tiene select: false, hay que asegurarse de que esté cargada
+    // Recuerda usar .select('+password') en la consulta del controlador
     return await bcrypt.compare(passwordIngresada, this.password);
 };
 

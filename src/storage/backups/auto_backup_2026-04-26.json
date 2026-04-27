@@ -1,0 +1,1212 @@
+{
+  "repuestos": [
+    {
+      "_id": "69b77cbd4aea4c8fc0dddda5",
+      "codigo": "BOM-100",
+      "nombre": "pizza",
+      "descripcion": "",
+      "marcaCarro": "toyota",
+      "modeloCarro": "corolla",
+      "precioVenta": 11,
+      "costoCompra": 0,
+      "stock": 974,
+      "stockMinimo": 2,
+      "ubicacionPasillo": "a-12",
+      "imagenUrl": "/img/1.png",
+      "createdAt": "2026-03-16T03:45:01.549Z",
+      "updatedAt": "2026-04-26T03:18:27.462Z",
+      "__v": 0,
+      "categoria": "Otros"
+    },
+    {
+      "_id": "69ced313cc9d8c58b2573614",
+      "codigo": "BOM-1011111111",
+      "nombre": "estefano",
+      "descripcion": "dfdfdf",
+      "categoria": "Frenos",
+      "marcaCarro": "toyot1",
+      "modeloCarro": "corollae",
+      "anioCompatibilidad": {
+        "desde": 2000,
+        "hasta": 2026
+      },
+      "precioVenta": 2,
+      "costoCompra": 1,
+      "stock": 1064,
+      "stockMinimo": 2,
+      "ubicacionPasillo": "a-121111",
+      "imagenUrl": "https://i.ibb.co/fz0B280J/1.png",
+      "createdAt": "2026-04-02T20:35:31.376Z",
+      "updatedAt": "2026-04-26T03:18:27.446Z",
+      "__v": 0
+    },
+    {
+      "_id": "69cf204dcc9d8c58b25737fb",
+      "codigo": "BOM-120",
+      "nombre": "tornillo",
+      "descripcion": "siuuu",
+      "categoria": "Otros",
+      "marcaCarro": "toyot1",
+      "modeloCarro": "corollae",
+      "anioCompatibilidad": {
+        "desde": 2000,
+        "hasta": 2026
+      },
+      "precioVenta": 12,
+      "costoCompra": 2,
+      "stock": 59,
+      "stockMinimo": 1,
+      "ubicacionPasillo": "a-120",
+      "imagenUrl": "https://i.ibb.co/fz0B280J/1.png",
+      "createdAt": "2026-04-03T02:05:01.474Z",
+      "updatedAt": "2026-04-26T03:00:15.088Z",
+      "__v": 0
+    }
+  ],
+  "ventas": [
+    {
+      "_id": "69e44a3c7496058b58d5d13b",
+      "vendedor": null,
+      "cliente": {
+        "nombre": "mariano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 6,
+          "precioUnitario": 0,
+          "subtotal": 0,
+          "_id": "69e44a3c7496058b58d5d13c"
+        }
+      ],
+      "total": 23,
+      "metodoPago": "Transferencia",
+      "estado": "Completada",
+      "fecha": "2026-04-19T03:21:32.047Z",
+      "nroControl": "FAC-892049",
+      "createdAt": "2026-04-19T03:21:32.050Z",
+      "updatedAt": "2026-04-19T03:21:32.050Z"
+    },
+    {
+      "_id": "69e44b5cad0670f45e07e758",
+      "vendedor": null,
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69b77cbd4aea4c8fc0dddda5",
+          "nombreCapturado": "pizza",
+          "cantidad": 2,
+          "precioUnitario": 0,
+          "subtotal": 0,
+          "_id": "69e44b5cad0670f45e07e759"
+        }
+      ],
+      "total": 22,
+      "metodoPago": "Transferencia",
+      "estado": "Completada",
+      "fecha": "2026-04-19T03:26:20.259Z",
+      "nroControl": "FAC-180262",
+      "createdAt": "2026-04-19T03:26:20.264Z",
+      "updatedAt": "2026-04-19T03:26:20.264Z"
+    },
+    {
+      "_id": "69e57cc32ccba4f3d463b882",
+      "nroControl": "FAC-363206",
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 6,
+          "precioUnitario": 2,
+          "subtotal": 12,
+          "_id": "69e57cc32ccba4f3d463b883"
+        }
+      ],
+      "total": 12,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-20T01:09:23.206Z",
+      "createdAt": "2026-04-20T01:09:23.208Z",
+      "updatedAt": "2026-04-20T01:09:23.208Z"
+    },
+    {
+      "_id": "69e62068c5bc6603efb636bc",
+      "nroControl": "FAC-256200",
+      "cliente": {
+        "nombre": "jorge",
+        "cedulaRif": "30367235"
+      },
+      "items": [
+        {
+          "repuestoId": "69b77cbd4aea4c8fc0dddda5",
+          "nombreCapturado": "pizza",
+          "cantidad": 2,
+          "precioUnitario": 11,
+          "subtotal": 22,
+          "_id": "69e62068c5bc6603efb636bd"
+        }
+      ],
+      "total": 22,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-20T12:47:36.201Z",
+      "createdAt": "2026-04-20T12:47:36.204Z",
+      "updatedAt": "2026-04-20T12:47:36.204Z"
+    },
+    {
+      "_id": "69e621f1c5bc6603efb6370d",
+      "nroControl": "FAC-649336",
+      "cliente": {
+        "nombre": "jose",
+        "cedulaRif": "430000"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 62,
+          "precioUnitario": 12,
+          "subtotal": 744,
+          "_id": "69e621f1c5bc6603efb6370e"
+        }
+      ],
+      "total": 744,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-20T12:54:09.336Z",
+      "createdAt": "2026-04-20T12:54:09.340Z",
+      "updatedAt": "2026-04-20T12:54:09.340Z"
+    },
+    {
+      "_id": "69e77f8d03731be32a7e34d8",
+      "nroControl": "FAC-149449",
+      "cliente": {
+        "nombre": "mariano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 2,
+          "precioUnitario": 2,
+          "subtotal": 4,
+          "_id": "69e77f8d03731be32a7e34d9"
+        }
+      ],
+      "total": 4,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-21T13:45:49.450Z",
+      "createdAt": "2026-04-21T13:45:49.455Z",
+      "updatedAt": "2026-04-21T13:45:49.455Z"
+    },
+    {
+      "_id": "69e83d9de2a24424ed3b3086",
+      "nroControl": "FAC-805492",
+      "cliente": {
+        "nombre": "caucho",
+        "cedulaRif": "12121212"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 2,
+          "precioUnitario": 2,
+          "subtotal": 4,
+          "_id": "69e83d9de2a24424ed3b3087"
+        },
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e83d9de2a24424ed3b3088"
+        },
+        {
+          "repuestoId": "69b77cbd4aea4c8fc0dddda5",
+          "nombreCapturado": "pizza",
+          "cantidad": 2,
+          "precioUnitario": 11,
+          "subtotal": 22,
+          "_id": "69e83d9de2a24424ed3b3089"
+        }
+      ],
+      "total": 50,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T03:16:45.494Z",
+      "createdAt": "2026-04-22T03:16:45.503Z",
+      "updatedAt": "2026-04-22T03:16:45.503Z"
+    },
+    {
+      "_id": "69e83e56e2a24424ed3b315e",
+      "nroControl": "FAC-990192",
+      "cliente": {
+        "nombre": "mau",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e83e56e2a24424ed3b315f"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T03:19:50.192Z",
+      "createdAt": "2026-04-22T03:19:50.196Z",
+      "updatedAt": "2026-04-22T03:19:50.196Z"
+    },
+    {
+      "_id": "69e946e577f0864da802c622",
+      "nroControl": "FAC-717266",
+      "cliente": {
+        "nombre": "mariano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e946e577f0864da802c623"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T22:08:37.270Z",
+      "createdAt": "2026-04-22T22:08:37.277Z",
+      "updatedAt": "2026-04-22T22:08:37.277Z"
+    },
+    {
+      "_id": "69e9493877f0864da802c69b",
+      "nroControl": "FAC-312227",
+      "cliente": {
+        "nombre": "estefano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 4,
+          "precioUnitario": 2,
+          "subtotal": 8,
+          "_id": "69e9493877f0864da802c69c"
+        }
+      ],
+      "total": 8,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T22:18:32.227Z",
+      "createdAt": "2026-04-22T22:18:32.229Z",
+      "updatedAt": "2026-04-22T22:18:32.229Z"
+    },
+    {
+      "_id": "69e94f7f77f0864da802c79a",
+      "nroControl": "FAC-919782",
+      "cliente": {
+        "nombre": "frai",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e94f7f77f0864da802c79b"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T22:45:19.783Z",
+      "createdAt": "2026-04-22T22:45:19.786Z",
+      "updatedAt": "2026-04-22T22:45:19.786Z"
+    },
+    {
+      "_id": "69e951e877f0864da802c80b",
+      "nroControl": "FAC-536589",
+      "cliente": {
+        "nombre": "mariano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e951e877f0864da802c80c"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T22:55:36.591Z",
+      "createdAt": "2026-04-22T22:55:36.593Z",
+      "updatedAt": "2026-04-22T22:55:36.593Z"
+    },
+    {
+      "_id": "69e9521c77f0864da802c817",
+      "nroControl": "FAC-588261",
+      "cliente": {
+        "nombre": "mariano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e9521c77f0864da802c818"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T22:56:28.262Z",
+      "createdAt": "2026-04-22T22:56:28.264Z",
+      "updatedAt": "2026-04-22T22:56:28.264Z"
+    },
+    {
+      "_id": "69e9522677f0864da802c81f",
+      "nroControl": "FAC-598459",
+      "cliente": {
+        "nombre": "mariano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e9522677f0864da802c820"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T22:56:38.459Z",
+      "createdAt": "2026-04-22T22:56:38.462Z",
+      "updatedAt": "2026-04-22T22:56:38.462Z"
+    },
+    {
+      "_id": "69e9522f77f0864da802c827",
+      "nroControl": "FAC-607443",
+      "cliente": {
+        "nombre": "mariano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e9522f77f0864da802c828"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T22:56:47.443Z",
+      "createdAt": "2026-04-22T22:56:47.445Z",
+      "updatedAt": "2026-04-22T22:56:47.445Z"
+    },
+    {
+      "_id": "69e9523677f0864da802c82f",
+      "nroControl": "FAC-614762",
+      "cliente": {
+        "nombre": "mariano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e9523677f0864da802c830"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T22:56:54.762Z",
+      "createdAt": "2026-04-22T22:56:54.763Z",
+      "updatedAt": "2026-04-22T22:56:54.763Z"
+    },
+    {
+      "_id": "69e9523d77f0864da802c837",
+      "nroControl": "FAC-621393",
+      "cliente": {
+        "nombre": "mariano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e9523d77f0864da802c838"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T22:57:01.393Z",
+      "createdAt": "2026-04-22T22:57:01.397Z",
+      "updatedAt": "2026-04-22T22:57:01.397Z"
+    },
+    {
+      "_id": "69e9524577f0864da802c83f",
+      "nroControl": "FAC-629225",
+      "cliente": {
+        "nombre": "mariano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e9524577f0864da802c840"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T22:57:09.226Z",
+      "createdAt": "2026-04-22T22:57:09.226Z",
+      "updatedAt": "2026-04-22T22:57:09.226Z"
+    },
+    {
+      "_id": "69e9538277f0864da802c8df",
+      "nroControl": "FAC-946700",
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e9538277f0864da802c8e0"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T23:02:26.700Z",
+      "createdAt": "2026-04-22T23:02:26.706Z",
+      "updatedAt": "2026-04-22T23:02:26.706Z"
+    },
+    {
+      "_id": "69e954037dad29ed5e640502",
+      "nroControl": "FAC-075976",
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e954037dad29ed5e640503"
+        },
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 2,
+          "precioUnitario": 2,
+          "subtotal": 4,
+          "_id": "69e954037dad29ed5e640504"
+        }
+      ],
+      "total": 28,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T23:04:35.976Z",
+      "createdAt": "2026-04-22T23:04:35.979Z",
+      "updatedAt": "2026-04-22T23:04:35.979Z"
+    },
+    {
+      "_id": "69e95ff830ac03e96ba3895d",
+      "nroControl": "FAC-136400",
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e95ff830ac03e96ba3895e"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-22T23:55:36.401Z",
+      "createdAt": "2026-04-22T23:55:36.403Z",
+      "updatedAt": "2026-04-22T23:55:36.403Z"
+    },
+    {
+      "_id": "69e965344d7eda08727a33d4",
+      "nroControl": "FAC-476000",
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69b77cbd4aea4c8fc0dddda5",
+          "nombreCapturado": "pizza",
+          "cantidad": 2,
+          "precioUnitario": 11,
+          "subtotal": 22,
+          "_id": "69e965344d7eda08727a33d5"
+        }
+      ],
+      "total": 22,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-23T00:17:56.000Z",
+      "createdAt": "2026-04-23T00:17:56.003Z",
+      "updatedAt": "2026-04-23T00:17:56.003Z"
+    },
+    {
+      "_id": "69e966164d7eda08727a33fe",
+      "nroControl": "FAC-702680",
+      "cliente": {
+        "nombre": "Jose",
+        "cedulaRif": "33984587"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 2,
+          "precioUnitario": 2,
+          "subtotal": 4,
+          "_id": "69e966164d7eda08727a33ff"
+        }
+      ],
+      "total": 4,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-23T00:21:42.681Z",
+      "createdAt": "2026-04-23T00:21:42.684Z",
+      "updatedAt": "2026-04-23T00:21:42.684Z"
+    },
+    {
+      "_id": "69e96ae712431901b27ddc8f",
+      "nroControl": "FAC-935636",
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69b77cbd4aea4c8fc0dddda5",
+          "nombreCapturado": "pizza",
+          "cantidad": 2,
+          "precioUnitario": 11,
+          "subtotal": 22,
+          "_id": "69e96ae712431901b27ddc90"
+        }
+      ],
+      "total": 22,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-23T00:42:15.637Z",
+      "createdAt": "2026-04-23T00:42:15.641Z",
+      "updatedAt": "2026-04-23T00:42:15.641Z"
+    },
+    {
+      "_id": "69e96d0bfdbc3f88aaabe4f9",
+      "nroControl": "FAC-483248",
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e96d0bfdbc3f88aaabe4fa"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-23T00:51:23.249Z",
+      "createdAt": "2026-04-23T00:51:23.251Z",
+      "updatedAt": "2026-04-23T00:51:23.251Z"
+    },
+    {
+      "_id": "69e96dfd5896eba700be007b",
+      "nroControl": "FAC-725053",
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e96dfd5896eba700be007c"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-23T00:55:25.053Z",
+      "createdAt": "2026-04-23T00:55:25.056Z",
+      "updatedAt": "2026-04-23T00:55:25.056Z"
+    },
+    {
+      "_id": "69e96ed9e65e33fe69e51e5f",
+      "nroControl": "FAC-945416",
+      "cliente": {
+        "nombre": "caucho",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 2,
+          "precioUnitario": 2,
+          "subtotal": 4,
+          "_id": "69e96ed9e65e33fe69e51e60"
+        }
+      ],
+      "total": 4,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-23T00:59:05.417Z",
+      "createdAt": "2026-04-23T00:59:05.419Z",
+      "updatedAt": "2026-04-23T00:59:05.419Z"
+    },
+    {
+      "_id": "69e972dae27b5c9dd717c624",
+      "nroControl": "FAC-970319",
+      "cliente": {
+        "nombre": "estefano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e972dae27b5c9dd717c625"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-23T01:16:10.320Z",
+      "createdAt": "2026-04-23T01:16:10.324Z",
+      "updatedAt": "2026-04-23T01:16:10.324Z"
+    },
+    {
+      "_id": "69e97726b4fb427cff43642b",
+      "nroControl": "FAC-070775",
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69e97726b4fb427cff43642c"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-23T01:34:30.775Z",
+      "createdAt": "2026-04-23T01:34:30.777Z",
+      "updatedAt": "2026-04-23T01:34:30.777Z"
+    },
+    {
+      "_id": "69e97baa5899cd799e8e4c60",
+      "nroControl": "FAC-226948",
+      "cliente": {
+        "nombre": "estefano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 2,
+          "precioUnitario": 2,
+          "subtotal": 4,
+          "_id": "69e97baa5899cd799e8e4c61"
+        }
+      ],
+      "total": 4,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-23T01:53:46.949Z",
+      "createdAt": "2026-04-23T01:53:46.953Z",
+      "updatedAt": "2026-04-23T01:53:46.953Z"
+    },
+    {
+      "_id": "69e97dd70d787a81834e53e0",
+      "nroControl": "FAC-783773",
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69b77cbd4aea4c8fc0dddda5",
+          "nombreCapturado": "pizza",
+          "cantidad": 2,
+          "precioUnitario": 11,
+          "subtotal": 22,
+          "_id": "69e97dd70d787a81834e53e1"
+        }
+      ],
+      "total": 22,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-23T02:03:03.774Z",
+      "createdAt": "2026-04-23T02:03:03.776Z",
+      "updatedAt": "2026-04-23T02:03:03.776Z"
+    },
+    {
+      "_id": "69ebec9c4040f02e32acd57e",
+      "nroControl": "FAC-212390",
+      "cliente": {
+        "nombre": "mariano",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 2,
+          "precioUnitario": 2,
+          "subtotal": 4,
+          "_id": "69ebec9c4040f02e32acd57f"
+        }
+      ],
+      "total": 4,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-24T22:20:12.390Z",
+      "createdAt": "2026-04-24T22:20:12.392Z",
+      "updatedAt": "2026-04-24T22:20:12.392Z"
+    },
+    {
+      "_id": "69ebeeeb4040f02e32acd58d",
+      "nroControl": "FAC-803451",
+      "cliente": {
+        "nombre": "xd",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69ebeeeb4040f02e32acd58e"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-24T22:30:03.451Z",
+      "createdAt": "2026-04-24T22:30:03.454Z",
+      "updatedAt": "2026-04-24T22:30:03.454Z"
+    },
+    {
+      "_id": "69ebfacfe1a33c96ed8526bf",
+      "nroControl": "FAC-847014",
+      "vendedor": "69eada4c16c2d5c303e52f78",
+      "cliente": {
+        "nombre": "xd",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 4,
+          "precioUnitario": 12,
+          "subtotal": 48,
+          "_id": "69ebfacfe1a33c96ed8526c0"
+        }
+      ],
+      "total": 48,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-24T23:20:47.014Z",
+      "createdAt": "2026-04-24T23:20:47.016Z",
+      "updatedAt": "2026-04-24T23:20:47.016Z"
+    },
+    {
+      "_id": "69ebfe9abca3bbc5a92dc58b",
+      "nroControl": "FAC-818198",
+      "vendedor": "69eada4c16c2d5c303e52f78",
+      "cliente": {
+        "nombre": "xd",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69b77cbd4aea4c8fc0dddda5",
+          "nombreCapturado": "pizza",
+          "cantidad": 2,
+          "precioUnitario": 11,
+          "subtotal": 22,
+          "_id": "69ebfe9abca3bbc5a92dc58c"
+        }
+      ],
+      "total": 22,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-24T23:36:58.198Z",
+      "createdAt": "2026-04-24T23:36:58.200Z",
+      "updatedAt": "2026-04-24T23:36:58.200Z"
+    },
+    {
+      "_id": "69ec0319010e50f274d50f38",
+      "nroControl": "FAC-969062",
+      "vendedor": "69eada4c16c2d5c303e52f78",
+      "cliente": {
+        "nombre": "frai",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 2,
+          "precioUnitario": 2,
+          "subtotal": 4,
+          "_id": "69ec0319010e50f274d50f39"
+        }
+      ],
+      "total": 4,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-24T23:56:09.065Z",
+      "createdAt": "2026-04-24T23:56:09.068Z",
+      "updatedAt": "2026-04-24T23:56:09.068Z"
+    },
+    {
+      "_id": "69ec0358010e50f274d50f46",
+      "nroControl": "FAC-032538",
+      "vendedor": "69eada4c16c2d5c303e52f78",
+      "cliente": {
+        "nombre": "xd",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 2,
+          "precioUnitario": 2,
+          "subtotal": 4,
+          "_id": "69ec0358010e50f274d50f47"
+        }
+      ],
+      "total": 4,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-24T23:57:12.538Z",
+      "createdAt": "2026-04-24T23:57:12.540Z",
+      "updatedAt": "2026-04-24T23:57:12.540Z"
+    },
+    {
+      "_id": "69ec06e15843bf1c4ac597cd",
+      "nroControl": "FAC-937901",
+      "vendedor": "69eada4c16c2d5c303e52f78",
+      "cliente": {
+        "nombre": "xd",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69ec06e15843bf1c4ac597ce"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-25T00:12:17.902Z",
+      "createdAt": "2026-04-25T00:12:17.905Z",
+      "updatedAt": "2026-04-25T00:12:17.905Z"
+    },
+    {
+      "_id": "69ed7b427e05d7117db8283f",
+      "nroControl": "FAC-266173",
+      "vendedor": null,
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 2,
+          "precioUnitario": 2,
+          "subtotal": 4,
+          "_id": "69ed7b427e05d7117db82840"
+        }
+      ],
+      "total": 4,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-26T02:41:06.175Z",
+      "createdAt": "2026-04-26T02:41:06.176Z",
+      "updatedAt": "2026-04-26T02:41:06.176Z"
+    },
+    {
+      "_id": "69ed7c247e05d7117db82849",
+      "nroControl": "FAC-492415",
+      "vendedor": null,
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69b77cbd4aea4c8fc0dddda5",
+          "nombreCapturado": "pizza",
+          "cantidad": 2,
+          "precioUnitario": 11,
+          "subtotal": 22,
+          "_id": "69ed7c247e05d7117db8284a"
+        }
+      ],
+      "total": 22,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-26T02:44:52.416Z",
+      "createdAt": "2026-04-26T02:44:52.417Z",
+      "updatedAt": "2026-04-26T02:44:52.417Z"
+    },
+    {
+      "_id": "69ed7fbf31cb1d836f4b9276",
+      "nroControl": "FAC-415080",
+      "vendedor": null,
+      "cliente": {
+        "nombre": "xd",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69cf204dcc9d8c58b25737fb",
+          "nombreCapturado": "tornillo",
+          "cantidad": 2,
+          "precioUnitario": 12,
+          "subtotal": 24,
+          "_id": "69ed7fbf31cb1d836f4b9277"
+        }
+      ],
+      "total": 24,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-26T03:00:15.081Z",
+      "createdAt": "2026-04-26T03:00:15.082Z",
+      "updatedAt": "2026-04-26T03:00:15.082Z"
+    },
+    {
+      "_id": "69ed84032a57799da15aac32",
+      "nroControl": "FAC-507435",
+      "vendedor": null,
+      "cliente": {
+        "nombre": "pizza",
+        "cedulaRif": "12345678"
+      },
+      "items": [
+        {
+          "repuestoId": "69ced313cc9d8c58b2573614",
+          "nombreCapturado": "estefano",
+          "cantidad": 2,
+          "precioUnitario": 2,
+          "subtotal": 4,
+          "_id": "69ed84032a57799da15aac33"
+        },
+        {
+          "repuestoId": "69b77cbd4aea4c8fc0dddda5",
+          "nombreCapturado": "pizza",
+          "cantidad": 2,
+          "precioUnitario": 11,
+          "subtotal": 22,
+          "_id": "69ed84032a57799da15aac34"
+        }
+      ],
+      "total": 26,
+      "metodoPago": "Pago Móvil",
+      "estado": "Completada",
+      "fecha": "2026-04-26T03:18:27.437Z",
+      "createdAt": "2026-04-26T03:18:27.439Z",
+      "updatedAt": "2026-04-26T03:18:27.439Z"
+    }
+  ],
+  "usuarios": [
+    {
+      "_id": "69ce6775f269c0ce8bfc53de",
+      "email": "admin@sanfrancisco.com",
+      "activo": true,
+      "createdAt": "2026-04-02T12:56:21.625Z",
+      "nombre": "admin",
+      "rol": "admin",
+      "updatedAt": "2026-04-02T12:56:21.625Z"
+    },
+    {
+      "_id": "69d02bde17ad6ded17414a3e",
+      "nombre": "mariano",
+      "email": "fraiderfigueroa12@gmail.com",
+      "rol": "trabajador",
+      "activo": true,
+      "createdAt": "2026-04-03T21:06:38.902Z",
+      "updatedAt": "2026-04-17T01:57:16.675Z"
+    },
+    {
+      "_id": "69d1c74d2deb2681dc195f06",
+      "nombre": "estefano",
+      "email": "estefano@gmail.com",
+      "rol": "cliente",
+      "activo": true,
+      "createdAt": "2026-04-05T02:22:05.765Z",
+      "updatedAt": "2026-04-05T02:22:05.765Z"
+    },
+    {
+      "_id": "69d2b052e4f3578a13abad71",
+      "nombre": "tornillo",
+      "email": "tornillo@gmail.com",
+      "rol": "cliente",
+      "activo": true,
+      "createdAt": "2026-04-05T18:56:18.049Z",
+      "updatedAt": "2026-04-05T18:56:18.049Z"
+    },
+    {
+      "_id": "69d2eb3bf5a3a3a99f476855",
+      "nombre": "pizza",
+      "email": "pizza@gmail.com",
+      "rol": "cliente",
+      "activo": true,
+      "createdAt": "2026-04-05T23:07:39.022Z",
+      "updatedAt": "2026-04-05T23:07:39.022Z"
+    },
+    {
+      "_id": "69d3085f7d3691827ead23ec",
+      "nombre": "pizza",
+      "email": "piazza@gmail.com",
+      "rol": "cliente",
+      "activo": true,
+      "createdAt": "2026-04-06T01:11:59.848Z",
+      "updatedAt": "2026-04-06T01:11:59.848Z"
+    },
+    {
+      "_id": "69d326c77d3691827ead2448",
+      "nombre": "gonzalo",
+      "email": "gonzalo@gmail.com",
+      "rol": "cliente",
+      "activo": true,
+      "createdAt": "2026-04-06T03:21:43.125Z",
+      "updatedAt": "2026-04-06T03:21:43.125Z"
+    },
+    {
+      "_id": "69d329e97d3691827ead2464",
+      "nombre": "yuca",
+      "email": "yuca@gmail.com",
+      "rol": "cliente",
+      "activo": true,
+      "createdAt": "2026-04-06T03:35:05.917Z",
+      "updatedAt": "2026-04-06T03:35:05.917Z"
+    },
+    {
+      "_id": "69de65f634215bc83c395671",
+      "nombre": "frai",
+      "email": "fraiider11@gmail.com",
+      "rol": "cliente",
+      "activo": true,
+      "createdAt": "2026-04-14T16:06:14.240Z",
+      "updatedAt": "2026-04-14T19:14:14.184Z"
+    },
+    {
+      "_id": "69eada4c16c2d5c303e52f78",
+      "nombre": "xd",
+      "email": "xd@gmail.com",
+      "rol": "cliente",
+      "activo": true,
+      "createdAt": "2026-04-24T02:49:48.967Z",
+      "updatedAt": "2026-04-24T02:49:48.967Z"
+    }
+  ],
+  "fecha": "2026-04-26T04:00:00.166Z"
+}

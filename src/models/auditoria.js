@@ -4,7 +4,7 @@ const AuditoriaSchema = new mongoose.Schema({
     usuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Usuario', // Asegúrate de que tu modelo de login se llame 'Usuario'
-        required: true
+        required: false//false porque el benditoooo correo no agarra
     },
     accion: {
         type: String, 
@@ -19,8 +19,8 @@ const AuditoriaSchema = new mongoose.Schema({
         trim: true
     },
     detalles: {
-        type: mongoose.Schema.Types.Mixed, // Permite guardar Strings u Objetos JSON
-        required: true
+        type: mongoose.Schema.Types.Mixed,
+    required: false // 🚨 Cámbialo a false
     },
     ipAddress: { 
         type: String // Extra para seguridad: saber desde qué red se hizo el cambio

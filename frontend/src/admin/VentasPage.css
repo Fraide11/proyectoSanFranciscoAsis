@@ -1,0 +1,261 @@
+/* --- 1. RESET Y CONTENEDORES MAESTROS --- */
+.admin-container {
+    background-color: #0f172a;
+    min-height: 100vh;
+    padding: 0 !important; /* Eliminamos bordes externos */
+    margin: 0 !important;
+    width: 100% !important;
+    color: #f1f5f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-content {
+    max-width: 100% !important; /* Ocupa todo el panel */
+    padding: 20px; /* Aire interno para que no toque los bordes */
+    margin: 0 !important;
+}
+
+/* --- 2. HEADER & STATS --- */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 30px;
+}
+
+.admin-title h1 {
+    color: #fff;
+    font-size: 2rem;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+.admin-title span { color: #3b82f6; }
+
+.stats-card {
+    background: #1e293b;
+    padding: 15px 25px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    text-align: center;
+}
+
+/* --- 3. TABLA DE VENTAS (MÁXIMO ESPACIO) --- */
+.table-wrapper {
+    background: #1e293b;
+    border-radius: 12px;
+    overflow-x: auto;
+    border: 1px solid #334155;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    width: 100% !important;
+}
+
+.ventas-table {
+    width: 100% !important;
+    border-collapse: collapse;
+    table-layout: fixed; /* Ayuda a respetar los anchos de columna */
+}
+
+.ventas-table th {
+    background: #0f172a;
+    padding: 15px 20px;
+    color: #64748b;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid #334155;
+    text-align: left;
+}
+
+.ventas-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #334155;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.ventas-table tr:hover {
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+/* --- 4. ASIGNACIÓN DE ANCHOS (PC) --- */
+@media (min-width: 769px) {
+    .ventas-table th:nth-child(1) { width: 70px;  } /* Orden */
+    .ventas-table th:nth-child(2) { width: 140px; } /* Cliente */
+    .ventas-table th:nth-child(3) { width: auto;  } /* Productos (EL RESTO DEL ESPACIO) */
+    .ventas-table th:nth-child(4) { width: 110px; } /* Monto */
+    .ventas-table th:nth-child(5) { width: 130px; } /* Referencia */
+    .ventas-table th:nth-child(6) { width: 150px; } /* Estado */
+    .ventas-table th:nth-child(7) { width: 100px; } /* Acciones */
+}
+
+/* --- 5. COMPONENTES INTERNOS --- */
+.order-number {
+    color: #3b82f6;
+    font-family: monospace;
+    font-weight: bold;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.price-tag {
+    color: #10b981;
+    font-weight: 800;
+}
+
+.items-list-container {
+    max-height: 80px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.item-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 2px 0;
+}
+
+/* --- 6. ESTADOS Y BOTONES --- */
+.status-select {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background-color: #0f172a;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-delete-order {
+    background: transparent;
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 0.75rem;
+}
+
+.btn-delete-order:hover {
+    background: #ff4d4d;
+    color: white;
+}
+
+/* --- 7. RESPONSIVE (MOBILE) --- */
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .ventas-table thead { display: none; }
+
+    .ventas-table, .ventas-table tbody, .ventas-table tr, .ventas-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .ventas-table tr {
+        margin-bottom: 15px;
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 10px;
+        border: 1px solid #334155;
+    }
+
+    .ventas-table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        border-bottom: 1px solid #334155;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 45px;
+    }
+
+    .ventas-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        font-weight: bold;
+        color: #94a3b8;
+        font-size: 10px;
+        text-transform: uppercase;
+    }
+
+    .ventas-table td:last-child { border-bottom: none; }
+    .status-select { width: 100%; }
+}
+
+/* --- AJUSTE PARA ELIMINAR SCROLL Y DEJAR QUE CREZCA ABAJO --- */
+
+.items-list-container {
+    /* Eliminamos la altura fija y el scroll */
+    max-height: none !important; 
+    overflow: visible !important; 
+    padding: 5px 0;
+    
+    /* Aseguramos que los items se apilen uno debajo de otro */
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 4px 0;
+    width: 100%;
+    /* Esto evita que el texto fuerce un ancho horizontal */
+    white-space: normal; 
+}
+
+/* --- REFUERZO PARA LA TABLA --- */
+.ventas-table td {
+    /* Permitimos que la celda ajuste su altura al contenido */
+    height: auto;
+    vertical-align: top; /* Alinea el contenido arriba para que se vea ordenado */
+    overflow: visible;
+}
+
+/* Si quieres que los nombres de productos largos no rompan todo: */
+.item-row span:first-child {
+    text-align: left;
+    flex: 1;
+    padding-right: 10px;
+}
+
+
+.btn-view-map {
+    background-color: #0ea5e9; /* Un azul cian vibrante */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-view-map:hover {
+    background-color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.btn-view-map:disabled {
+    background-color: #475569;
+    cursor: not-allowed;
+    opacity: 0.6;
+}

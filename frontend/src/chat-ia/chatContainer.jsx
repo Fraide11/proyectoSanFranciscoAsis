@@ -32,15 +32,18 @@ const ChatContainer = () => {
 
   return (
     <div style={{ 
-      width: '320px', 
-      height: '450px', 
-      backgroundColor: 'white', 
-      border: '1px solid #ccc',
-      borderRadius: '10px',
-      display: 'flex',
-      flexDirection: 'column',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-      fontFamily: 'Arial, sans-serif'
+     
+      
+
+ 
+  width: '100%', // Para que llene el contenedor flotante que hicimos en App.jsx
+  height: '100%', 
+  backgroundColor: '#1a1a2e', // Fondo oscuro como tu app
+  display: 'flex',
+  flexDirection: 'column',
+  fontFamily: 'Arial, sans-serif',
+  color: 'white'
+  
     }}>
       <div style={{ padding: '15px', background: '#2563eb', color: 'white', borderRadius: '10px 10px 0 0', fontWeight: 'bold' }}>
         Chat San Francisco AI

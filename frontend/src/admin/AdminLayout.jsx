@@ -1,102 +1,141 @@
-import React, { useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import './AdminStyles.css';
 
-const AdminLayout = ({ children }) => {
+const AdminLayout = () => {
+  const { user, logoutAction } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-  
-  // --- 1. Extracción Segura de Info ---
-  // Obtenemos los datos reales guardados en el login
-  const token = localStorage.getItem('token');
-  const userRole = localStorage.getItem('userRole'); // Debe ser 'admin' o 'vendedor'
-  const userName = localStorage.getItem('userName') || "Usuario"; // Dinámico
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
-  // --- 2. Protección de Ruta (Front-end) ---
-  // Si no hay token o rol, redirigimos al login inmediatamente. 
-  // Esto evita que alguien entre escribiendo la URL manual.
-  useEffect(() => {
-    if (!token || !userRole) {
-      navigate('/login');
-    }
-  }, [token, userRole, navigate]);
+  // --- 1. UX: Funciones de Control ---
+  const isActive = (path) => (location.pathname === path ? 'active' : '');
+  const toggleMenu = () => setMenuAbierto(!menuAbierto);
+  const cerrarMenu = () => setMenuAbierto(false);
 
-  // --- 3. Lógica de Cerrar Sesión ---
-  const handleLogout = () => {
-    // Borramos TODO el almacenamiento local para seguridad total
-    localStorage.clear(); 
-    navigate('/login');
-  };
-
-  // --- 4. UX: Resaltar Ruta Activa ---
-  const isActive = (path) => location.pathname === path ? 'active' : '';
-
-  // --- 5. Título Dinámico del Header ---
+  // --- 2. Título Dinámico ---
   const getHeaderTitle = () => {
-    if (location.pathname.includes('ventas')) return 'Gestión de Ventas';
-    if (location.pathname.includes('reportes')) return 'Análisis de Datos y Reportes';
-    if (location.pathname.includes('workers')) return 'Gestión de Personal';
-    return 'Gestión de Repuestos y Productos';
+    const path = location.pathname;
+    if (path.includes('ventas')) return 'Gestión de Ventas';
+    if (path.includes('reportes')) return 'Reportes e Inteligencia';
+    if (path.includes('estadisticas')) return 'Análisis Estadístico'; // Agregado
+    if (path.includes('workers')) return 'Control de Personal';
+    if (path.includes('inventario')) return 'Control de Inventario';
+    return 'Dashboard General';
   };
 
-  // Si no está logueado, no renderizamos nada mientras redirige (evita parpadeo)
-  if (!token || !userRole) return null;
+
+
+ const handleLogout = () => {
+  logoutAction(); // Usamos el nombre correcto
+  navigate('/');  // Redirigimos a la raíz
+};
 
   return (
-    <div className="admin-container">
-      <aside className="admin-sidebar">
-        {/* Usamos 'admin' y 'vendedor' para coincidir con tu Backend */}
-        <div className="admin-logo">
-          ⚙️ San Francisco {userRole === 'admin' ? '(Admin)' : '(Personal)'}
+    <div className={`admin-layout-wrapper ${menuAbierto ? 'menu-active' : ''}`}>
+      
+      {/* BOTÓN HAMBURGUESA (Móvil) */}
+      <button className="mobile-toggle" onClick={toggleMenu}>
+        {menuAbierto ? '✕' : '☰'}
+      </button>
+
+      {/* OVERLAY */}
+      {menuAbierto && <div className="menu-overlay" onClick={cerrarMenu}></div>}
+
+      {/* SIDEBAR MODERNO */}
+      <aside className={`admin-sidebar-v2 ${menuAbierto ? 'open' : ''}`}>
+        <div className="admin-brand">
+          <div className="brand-logo">🛠️</div>
+          <div className="brand-text">
+            <span>San Francisco</span>
+            <small>{user?.rol === 'admin' ? 'SYSTEM ADMIN' : 'VENTAS'}</small>
+          </div>
         </div>
-        
-        <nav className="admin-nav">
-          <Link to="/admin" className={`admin-nav-item ${isActive('/admin')}`}>
-            📦 Inventario
+
+        <nav className="admin-menu">
+          <p className="menu-label">Principal</p>
+          <Link to="/admin" className={`menu-item ${isActive('/admin')}`} onClick={cerrarMenu}>
+            <span className="icon">📦</span> Inventario
           </Link>
-          <Link to="/admin/ventas" className={`admin-nav-item ${isActive('/admin/ventas')}`}>
-            💰 Ventas
+          <Link to="/admin/ventas" className={`menu-item ${isActive('/admin/ventas')}`} onClick={cerrarMenu}>
+            <span className="icon">💰</span> Ventas
           </Link>
-          
-          {/* --- CONTROL DE ACCESO (RUTAS PRIVADAS) --- */}
-          {/* Solo el Admin ve estas opciones, según el diagrama de clases */}
-          {userRole === 'admin' && (
+
+          {/* SECCIÓN RESTRINGIDA PARA EL ADMIN */}
+          {user?.rol === 'admin' && (
             <>
-              <div className="admin-nav-divider"></div>
-              <Link to="/admin/reportes" className={`admin-nav-item ${isActive('/admin/reportes')}`}>
-                📊 Reportes (PDF)
+              <p className="menu-label">Administración</p>
+              <Link to="/admin/workers" className={`menu-item ${isActive('/admin/workers')}`} onClick={cerrarMenu}>
+                <span className="icon">👥</span> Trabajadores
               </Link>
-              <Link to="/admin/workers" className={`admin-nav-item ${isActive('/admin/workers')}`}>
-                👥 Trabajadores
+
+              <Link to="/admin/reportes" className={`menu-item ${isActive('/admin/reportes')}`} onClick={cerrarMenu}>
+                <span className="icon">📄</span> Reportes PDF
               </Link>
+
+              {/* BOTÓN DE ESTADÍSTICAS CORREGIDO */}
+              <Link to="/admin/estadisticas" className={`menu-item ${isActive('/admin/estadisticas')}`} onClick={cerrarMenu}>
+                <span className="icon">📊</span> Estadísticas
+              </Link>
+
+              <li className="admin-menu-item">
+  <Link to="/admin/delivery" className="admin-nav-link">
+    <span className="icon">🚚</span> {/* O usa tu componente de iconos */}
+    <span>Logística / Delivery</span>
+  </Link>
+  <br></br>
+  <br></br>
+
+
+ <Link to="/admin/historial-cambios" className={`menu-item ${isActive('/admin/historial-cambios')}`} onClick={cerrarMenu}>
+    <span className="icon">🕒</span> Auditoría
+</Link>
+
+
+</li>
             </>
           )}
         </nav>
+        
 
-        <button 
-          onClick={handleLogout}
-          className="admin-logout-btn"
-          title="Cerrar sesión de forma segura"
-        >
-          🚪 Cerrar Sesión
-        </button>
+        <div className="sidebar-footer">
+          <button onClick={handleLogout} className="logout-btn-v2">
+            <span className="icon">🚪</span> Cerrar Sesión
+            
+          </button>
+        </div>
       </aside>
 
-      <main className="admin-content">
-        <header className="admin-header">
-          <h2>{getHeaderTitle()}</h2>
-          
-          <div className="admin-user-info">
-            {/* Ícono dinámico según el rol */}
-            <span className="user-icon">{userRole === 'admin' ? '🛡️' : '🔧'}</span>
-            <strong>{userName}</strong>
-            <small>({userRole === 'admin' ? 'Administrador' : 'Vendedor'})</small>
+      {/* CONTENIDO PRINCIPAL */}
+      <main className="admin-main-panel">
+        <header className="admin-topbar">
+          <div className="topbar-left">
+            <h1>{getHeaderTitle()}</h1>
+          </div>
+
+          <div className="topbar-right">
+            <div className="user-profile-badge">
+              <div className="user-info-text">
+                <span className="user-name">{user?.nombre || 'Admin'}</span>
+                <span className="user-role-label">{user?.rol}</span>
+              </div>
+              <div className="user-avatar">
+                {user?.nombre?.charAt(0).toUpperCase() || 'A'}
+              </div>
+            </div>
           </div>
         </header>
-        
-        <div className="admin-body">
-          {children}
-        </div>
+
+        {/* CONTENIDO DE LAS PÁGINAS HIJAS */}
+        <section className="admin-page-content" style={{ 
+            minHeight: '500px', 
+            width: '100%', 
+            marginTop: '80px' 
+        }}>
+          {/* El Outlet es donde se renderizará EstadisticasPage.jsx */}
+          <Outlet /> 
+        </section>
       </main>
     </div>
   );

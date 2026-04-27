@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // 1. Centralizamos la URL usando la variable de entorno de Vite
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://proyectosanfranciscoasis.onrender.com/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'VITE_API_URL=http://localhost:10000/api';
 const API_URL = `${BASE_URL}/repuestos`;
 
 // 2. Configuramos una instancia de Axios para Repuestos
@@ -21,17 +21,16 @@ repuestosApi.interceptors.request.use((config) => {
 
 // --- FUNCIONES CRUD ---
 
-export const getRepuestos = async (busqueda = "") => {
-    try {
-        // Usamos params de Axios para que la URL quede limpia: ?buscar=bujia
-        const response = await repuestosApi.get('/', {
-            params: { buscar: busqueda }
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error en getRepuestos:", error.response?.data || error.message);
-        return []; // Retornamos array vacío para que el .map() de React no explote
-    }
+// frontend/src/services/repuestoService.js
+export const getRepuestos = async () => {
+  try {
+    const response = await fetch('http://localhost:10000/api/repuestos');
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error("Error en service:", error);
+    return [];
+  }
 };
 
 export const createRepuesto = async (datos) => {

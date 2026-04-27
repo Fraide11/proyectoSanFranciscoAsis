@@ -1,33 +1,47 @@
 const express = require('express');
 const router = express.Router();
 
-// Controladores
+// 1. Agregamos updateUserProfile a la lista de importaciones
 const { 
     login, 
+    register,
     registerWorker, 
-    deleteWorker 
+    deleteWorker,
+    forgotPassword,
+    resetPassword,
+    updateUserProfile // <--- ¡No olvides esta!
 } = require('../controllers/authController');
 
-// Middlewares de Seguridad
+// 2. Aquí lo importas como "proteger"
 const { proteger } = require('../middleware/authMiddleware');
 const autorizarRoles = require('../middleware/roleMiddleware');
+
+/**
+ * 🔑 RUTAS DE PERFIL Y SEGURIDAD
+ */
+
+// 3. Cambiamos 'protect' por 'proteger' para que coincida con tu importación
+router.put('/profile', proteger, updateUserProfile);
+
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password/:token', resetPassword);
 
 /**
  * 🔑 RUTAS DE AUTENTICACIÓN Y USUARIOS
  */
 
-// 1. Login (Público) - /api/auth/login
+// Login (Público)
 router.post('/login', login);
+router.post('/register', register);
 
-// 2. Registro de Trabajadores (Solo Admin) - /api/auth/register-worker
-// Se requiere estar logueado y tener rol de administrador
+// Registro de Trabajadores (Solo Admin)
 router.post('/register-worker', 
     proteger, 
     autorizarRoles('admin'), 
     registerWorker
 );
 
-// 3. Eliminar Trabajador (Solo Admin) - /api/auth/worker/:id
+// Eliminar Trabajador (Solo Admin)
 router.delete('/worker/:id', 
     proteger, 
     autorizarRoles('admin'), 

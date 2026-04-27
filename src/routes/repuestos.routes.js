@@ -1,33 +1,51 @@
 const express = require('express');
-const path = require('path'); // Módulo nativo para manejar rutas
 const router = express.Router();
 
-// --- IMPORTACIÓN DINÁMICA DE CONTROLADORES ---
-// Usamos path.join para evitar errores de "Module Not Found"
-const repuestoController = require(path.join(__dirname, '..', 'controllers', 'repuestoController'));
+// --- IMPORTACIÓN DE CONTROLADORES ---
+const repuestoController = require('../controllers/repuestoController');
 
-const { 
-    getRepuestos, 
-    createRepuesto, 
-    deleteRepuesto, 
-    updateRepuesto 
-} = repuestoController;
-
-// --- IMPORTACIÓN DINÁMICA DE MIDDLEWARES ---
-const auth = require(path.join(__dirname, '..', 'middleware', 'authMiddleware'));
-const { proteger, autorizar } = auth;
+// --- IMPORTACIÓN DE MIDDLEWARES ---
+// Asegúrate de que la ruta '../middleware/authMiddleware' sea la correcta
+const auth = require('../middleware/authMiddleware');
 
 // ==========================================
-//                RUTAS
+//                RUTAS DE INVENTARIO
 // ==========================================
 
-// RUTAS PÚBLICAS
-router.get('/', getRepuestos);
+/**
+ * @route   GET /api/repuestos
+ * @desc    Obtener lista de repuestos (Público)
+ */
+router.get('/', repuestoController.getRepuestos);
 
-// RUTAS PRIVADAS (Protegidas por Token y Rol)
-// Nota: 'proteger' siempre debe ir antes que 'autorizar'
-router.post('/', proteger, autorizar('admin', 'vendedor'), createRepuesto);
-router.put('/:id', proteger, autorizar('admin', 'vendedor'), updateRepuesto);
-router.delete('/:id', proteger, autorizar('admin'), deleteRepuesto);
+/**
+ * @route   POST /api/repuestos
+ * @desc    Registrar nuevo repuesto (Admin y Vendedor)
+ */
+router.post('/', 
+    auth.proteger, 
+    auth.autorizar('admin', 'trabajador'), 
+    repuestoController.createRepuesto
+);
+
+/**
+ * @route   PUT /api/repuestos/:id
+ * @desc    Actualizar datos de un repuesto (Admin y Vendedor)
+ */
+router.put('/:id', 
+    auth.proteger, 
+    auth.autorizar('admin', 'trabajador'), 
+    repuestoController.updateRepuesto
+);
+
+/**
+ * @route   DELETE /api/repuestos/:id
+ * @desc    Eliminar un repuesto del sistema (Solo Admin)
+ */
+router.delete('/:id', 
+    auth.proteger, 
+    auth.autorizar('admin'), 
+    repuestoController.deleteRepuesto
+);
 
 module.exports = router;

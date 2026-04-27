@@ -1,62 +1,43 @@
+/* 1. CONFIGURACIÓN GLOBAL (CSS VARIABLES) */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
+  /* Colores Base de la Marca */
+  --accent: #00d4ff; /* Azul Turquesa */
+  --accent-bg: rgba(0, 212, 255, 0.1);
+  --accent-border: rgba(0, 212, 255, 0.5);
   
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* Colores de Fondo y Texto */
+  --bg: #0f0c29; 
+  --text: #9ca3af;
+  --text-h: #f3f4f6;
+  --border: #2e303a;
+  --code-bg: #1f2028;
+  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  /* Tipografías */
+  --sans: 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
-
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+/* 2. MODO TRABAJADOR (Aislamiento de Color) */
+.modo-operativo {
+  --accent: #ffa500; 
+  --accent-bg: rgba(255, 165, 0, 0.15);
+  --accent-border: rgba(255, 165, 0, 0.5);
+}
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* 3. ESTRUCTURA BASE */
+* {
+  box-sizing: border-box; /* Previene problemas de ancho con padding/border */
 }
 
 body {
   margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.45;
+  min-height: 100vh;
 }
 
 #root {
@@ -65,52 +46,81 @@ body {
   margin: 0 auto;
   text-align: center;
   border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
+/* 4. TIPOGRAFÍA */
+h1, h2 {
   font-weight: 500;
   color: var(--text-h);
+  margin: 0;
 }
 
 h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+  padding: 32px 0; /* Cambiado margin por padding para evitar colapsos */
 }
 
-code,
+/* 5. COMPONENTES DINÁMICOS */
 .counter {
   font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block; /* Para que el transform funcione correctamente */
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+.counter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px var(--accent-bg);
+}
+
+/* 6. SISTEMA HERO 3D */
+.hero {
+  position: relative;
+  perspective: 2000px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero .framework {
+  filter: drop-shadow(0 0 15px var(--accent));
+  transition: transform 0.6s ease;
+}
+
+/* 7. BADGES (Carrito) */
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #ff4757;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+/* 8. LAYOUTS */
+.admin-layout-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 100%;
 }

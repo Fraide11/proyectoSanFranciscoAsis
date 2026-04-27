@@ -5,13 +5,13 @@ const VentaSchema = new mongoose.Schema({
     nroControl: {
         type: String,
         unique: true,
-        required: true,
+        required: false,
         default: () => `FAC-${Date.now().toString().slice(-6)}` // Generador básico
     },
     vendedor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Usuario',
-        required: true
+        required: false
     },
     cliente: {
         nombre: { type: String, default: 'Consumidor Final', trim: true },
@@ -66,4 +66,5 @@ const VentaSchema = new mongoose.Schema({
 // Índice para búsquedas rápidas por cliente
 VentaSchema.index({ "cliente.cedulaRif": 1 });
 
-module.exports = mongoose.model('Venta', VentaSchema);
+//module.exports = mongoose.model('Venta', VentaSchema);
+module.exports = mongoose.models.Venta || mongoose.model('Venta', VentaSchema);

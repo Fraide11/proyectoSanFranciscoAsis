@@ -4,8 +4,8 @@ import './index.css'
 import App from './App.jsx'
 
 // Importamos los Proveedores de Contexto
-import { AuthProvider } from './context/AuthContext';
-import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext.jsx';
+import { CartProvider } from './context/CartContext.jsx';
 
 // Seleccionamos el elemento root del HTML
 const container = document.getElementById('root');

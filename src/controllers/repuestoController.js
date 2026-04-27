@@ -1,7 +1,8 @@
 const Repuesto = require('../models/repuesto');
 const { registrarLog } = require('../services/auditoriaService');
+const repuestoServiceBack = require('../services/repuestoServiceBack'); // El nuevo servicio para LogUpdate
 
-// @desc    Obtener todos los repuestos (con filtros)
+// @desc    Obtener todos los repuestos (con búsqueda y filtros)
 exports.getRepuestos = async (req, res) => {
     try {
         const { marca, modelo, buscar } = req.query;
@@ -20,92 +21,159 @@ exports.getRepuestos = async (req, res) => {
         }
 
         const repuestos = await Repuesto.find(query).sort({ createdAt: -1 });
-        res.json(repuestos);
+        return res.json(repuestos);
     } catch (err) {
-        res.status(500).json({ msg: "Error al obtener repuestos", error: err.message });
+        console.error("Error en getRepuestos:", err.message);
+        return res.status(500).json({ 
+            msg: "Error al obtener repuestos", 
+            error: err.message 
+        });
     }
 };
 
 // @desc    Crear un nuevo repuesto
 exports.createRepuesto = async (req, res) => {
     try {
-        const nuevoRepuesto = new Repuesto(req.body);
+        // 1. Limpieza y normalización de datos
+        const datos = {
+            ...req.body,
+            codigo: req.body.codigo?.trim().toUpperCase(),
+            precioVenta: Number(req.body.precioVenta) || 0,
+            costoCompra: Number(req.body.costoCompra) || 0,
+            stock: Number(req.body.stock) || 0,
+            stockMinimo: Number(req.body.stockMinimo) || 2
+        };
+
+        // 2. Guardar en la base de datos
+        const nuevoRepuesto = new Repuesto(datos);
         const repuestoGuardado = await nuevoRepuesto.save();
 
-        // AUDITORÍA: Registro de creación
-        await registrarLog(req.user?.id, 'CREAR', 'REPUESTOS', { 
-            nombre: repuestoGuardado.nombre, 
-            sku: repuestoGuardado.codigo 
-        });
+        // 3. Auditoría Segura (Encapsulada para no romper la respuesta principal)
+        try {
+            if (registrarLog && req.user) {
+                await registrarLog(req.user.id, 'CREAR', 'REPUESTOS', { 
+                    nombre: repuestoGuardado.nombre, 
+                    sku: repuestoGuardado.codigo 
+                });
+            }
+        } catch (logErr) {
+            console.warn("⚠️ Fallo log de auditoría:", logErr.message);
+        }
 
-        res.status(201).json(repuestoGuardado);
+        // 4. Respuesta exitosa
+        return res.status(201).json(repuestoGuardado);
+
     } catch (err) {
-        res.status(400).json({ msg: "Error al crear: Verifica si el código ya existe", error: err.message });
+        console.error("❌ Error en createRepuesto:", err.message);
+        
+        // Manejo de duplicados (Código SKU ya existente)
+        if (err.code === 11000) {
+            return res.status(400).json({ 
+                msg: "El código SKU ya existe en el sistema", 
+                error: "Duplicado" 
+            });
+        }
+
+        // Manejo de errores de validación de Mongoose
+        return res.status(400).json({ 
+            msg: "Error de validación: Revisa los campos obligatorios", 
+            error: err.message 
+        });
     }
 };
 
-// @desc    Actualizar TODO el repuesto
+// @desc    Actualizar el repuesto
+// @desc    Actualizar el repuesto con LogUpdate detallado
 exports.updateRepuesto = async (req, res) => {
     try {
-        const actualizado = await Repuesto.findByIdAndUpdate(
-            req.params.id, 
-            req.body, 
-            { new: true, runValidators: true } 
-        );
+        const { id } = req.params;
+        const usuarioId = req.user.id; // Asumiendo que req.user viene del middleware de auth
+        const datosNuevos = { ...req.body };
         
-        if (!actualizado) return res.status(404).json({ msg: "Repuesto no encontrado" });
+        // Normalización de datos
+        if (datosNuevos.precioVenta !== undefined) datosNuevos.precioVenta = Number(datosNuevos.precioVenta);
+        if (datosNuevos.stock !== undefined) datosNuevos.stock = Number(datosNuevos.stock);
+        if (datosNuevos.codigo) datosNuevos.codigo = datosNuevos.codigo.trim().toUpperCase();
 
-        // AUDITORÍA: Registro de edición
-        await registrarLog(req.user?.id, 'EDITAR', 'REPUESTOS', `Actualizó datos de: ${actualizado.nombre}`);
+        // USAMOS EL SERVICIO BACK PARA LOGUPDATE
+        // Esta función busca el anterior, actualiza y guarda en la colección LogUpdate
+        const actualizado = await repuestoServiceBack.actualizarRepuestoConLog(
+            id, 
+            datosNuevos, 
+            usuarioId
+        );
 
-        res.json(actualizado);
+        // Auditoría General (La que ya tenías)
+        try {
+            if (registrarLog && req.user) {
+                await registrarLog(req.user.id, 'EDITAR', 'REPUESTOS', `Actualizó: ${actualizado.nombre} (${actualizado.codigo})`);
+            }
+        } catch (logErr) {}
+
+        return res.json(actualizado);
+
     } catch (err) {
-        res.status(400).json({ msg: "Error al actualizar datos", error: err.message });
-    }
-};
-
-// @desc    Actualizar Stock (Específico para ventas o entradas)
-exports.updateStock = async (req, res) => {
-    try {
-        const { cantidad } = req.body;
-        const repuesto = await Repuesto.findById(req.params.id);
-
-        if (!repuesto) return res.status(404).json({ msg: "Repuesto no encontrado" });
-
-        const cambio = parseInt(cantidad);
-        if (isNaN(cambio)) return res.status(400).json({ msg: "La cantidad debe ser un número" });
-
-        const stockAnterior = repuesto.stock;
-        repuesto.stock += cambio;
-        if (repuesto.stock < 0) repuesto.stock = 0;
-
-        await repuesto.save();
-
-        // AUDITORÍA: Registro de movimiento de inventario
-        await registrarLog(req.user?.id, 'STOCK', 'REPUESTOS', {
-            producto: repuesto.nombre,
-            cambio: cambio,
-            antes: stockAnterior,
-            ahora: repuesto.stock
+        console.error("❌ Error en updateRepuesto:", err.message);
+        if (err.message === 'Repuesto no encontrado') {
+            return res.status(404).json({ msg: err.message });
+        }
+        return res.status(400).json({ 
+            msg: "Error al actualizar datos", 
+            error: err.message 
         });
-
-        res.json({ msg: "Stock actualizado con éxito", nuevoStock: repuesto.stock });
-    } catch (err) {
-        res.status(500).json({ msg: "Error al procesar el stock" });
     }
 };
+
+
+exports.actualizarRepuesto = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const repuestoAnterior = await Repuesto.findById(id);
+
+        if (!repuestoAnterior) return res.status(404).json({ message: "No existe" });
+
+        // Actualizamos el repuesto
+        const repuestoActualizado = await Repuesto.findByIdAndUpdate(id, req.body, { new: true });
+
+        // LLAMADA AL SERVICIO DE LOGS (Aquí es donde se guarda)
+        // Pasamos: ID del repuesto, data vieja, data nueva (req.body) e ID del usuario (req.usuario.id)
+        await repuestoServiceBack.compararYRegistrarCambios(
+            id, 
+            repuestoAnterior, 
+            req.body, 
+            req.usuario.id 
+        );
+
+        res.json(repuestoActualizado);
+    } catch (error) {
+        res.status(500).json({ message: "Error al actualizar" });
+    }
+};
+
+
 
 // @desc    Eliminar repuesto
 exports.deleteRepuesto = async (req, res) => {
     try {
         const repuestoEliminado = await Repuesto.findByIdAndDelete(req.params.id);
-        if (!repuestoEliminado) return res.status(404).json({ msg: "El repuesto no existe" });
         
-        // AUDITORÍA: Registro de eliminación (Crítico)
-        await registrarLog(req.user?.id, 'ELIMINAR', 'REPUESTOS', `Eliminó el producto: ${repuestoEliminado.nombre} (SKU: ${repuestoEliminado.codigo})`);
+        if (!repuestoEliminado) {
+            return res.status(404).json({ msg: "El repuesto no existe" });
+        }
+        
+        // Auditoría Segura
+        try {
+            if (registrarLog && req.user) {
+                await registrarLog(req.user.id, 'ELIMINAR', 'REPUESTOS', `Eliminó SKU: ${repuestoEliminado.codigo}`);
+            }
+        } catch (logErr) {}
 
-        res.json({ msg: "Repuesto eliminado del sistema correctamente" });
+        return res.json({ msg: "Repuesto eliminado correctamente" });
     } catch (err) {
-        res.status(500).json({ msg: "Error interno al eliminar" });
+        console.error("❌ Error en deleteRepuesto:", err.message);
+        return res.status(500).json({ 
+            msg: "Error interno al eliminar", 
+            error: err.message 
+        });
     }
 };

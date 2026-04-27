@@ -1,22 +1,32 @@
 const Repuesto = require('../models/repuesto');
 const Venta = require('../models/venta');
+const { generarDocumentoPDF } = require('../services/pdfServices');
 
 // @desc    Obtener repuestos con stock bajo el mínimo
 // @route   GET /api/reportes/stock-bajo
 const obtenerStockBajo = async (req, res) => {
+    console.log("--> [BACKEND] Petición recibida en obtenerStockBajo");
+    console.log("--> [BACKEND] Query params:", req.query);
+
     try {
-        // Buscamos repuestos donde el stock sea menor o igual al stockMinimo definido en el modelo
         const repuestosCriticos = await Repuesto.find({
             $expr: { $lte: ["$stock", "$stockMinimo"] }
-        }).sort({ stock: 1 }).lean();
+        }).lean();
 
-        res.status(200).json({
-            status: 'success',
-            count: repuestosCriticos.length,
-            data: repuestosCriticos
-        });
+        console.log(`--> [BACKEND] Repuestos encontrados con stock bajo: ${repuestosCriticos.length}`);
+
+        if (req.query.download === 'pdf') {
+            console.log("--> [BACKEND] Iniciando generación de PDF...");
+            const pathPDF = await generarDocumentoPDF({ data: repuestosCriticos }, 'REPORTE');
+            
+            console.log("--> [BACKEND] PDF generado con éxito en:", pathPDF);
+            return res.download(pathPDF);
+        }
+
+        res.status(200).json({ status: 'success', data: repuestosCriticos });
     } catch (error) {
-        res.status(500).json({ status: 'error', message: "Error al generar reporte de inventario" });
+        console.error("❌ [BACKEND] Error en controlador:", error.message);
+        res.status(500).json({ status: 'error', message: error.message });
     }
 };
 
@@ -52,7 +62,37 @@ const obtenerVentasHoy = async (req, res) => {
     }
 };
 
+
+
+
+// @desc    Reporte de Inventario Completo (Stock Actual)
+// @route   GET /api/reportes/inventario-completo
+// Reporte de Inventario Completo (Stock Actual)
+const obtenerInventarioCompleto = async (req, res) => {
+    try {
+        // Traemos TODO el inventario, ordenado por nombre
+        const inventario = await Repuesto.find({}).sort({ nombre: 1 }).lean();
+
+        if (req.query.download === 'pdf') {
+            // Llamamos al servicio con el nuevo tipo
+            const pathPDF = await generarDocumentoPDF({ data: inventario }, 'INVENTARIO_TOTAL');
+            
+            return res.download(pathPDF, () => {
+                const fs = require('fs');
+                if (fs.existsSync(pathPDF)) fs.unlinkSync(pathPDF); // Mantenemos limpio el servidor
+            });
+        }
+
+        res.status(200).json({ status: 'success', data: inventario });
+    } catch (error) {
+        console.error("Error en inventario completo:", error);
+        res.status(500).json({ status: 'error', message: "Error al generar el inventario" });
+    }
+};
+
+
 module.exports = {
     obtenerStockBajo,
-    obtenerVentasHoy
+    obtenerVentasHoy,
+    obtenerInventarioCompleto
 };

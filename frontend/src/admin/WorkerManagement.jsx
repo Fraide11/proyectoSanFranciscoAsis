@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Usamos axios directamente o vía service para mayor control
+import axios from 'axios';
+import { FaUserPlus, FaShieldAlt } from 'react-icons/fa';
 
 const WorkerManagement = () => {
-    // 1. Estado inicial con Rol (Importante para tu diagrama de clases)
+    // 1. Estado inicial coherente con tu Backend
     const [formData, setFormData] = useState({ 
         nombre: '', 
         email: '', 
         password: '',
-        rol: 'vendedor' // Por defecto, el admin crea vendedores/trabajadores
+        rol: 'trabajador' // Ajustado a 'trabajador' para coincidir con el option
     });
     
     const [message, setMessage] = useState({ type: '', text: '' });
@@ -17,45 +18,61 @@ const WorkerManagement = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setMessage({ type: '', text: '' });
+    e.preventDefault();
+    setLoading(true);
+    setMessage({ type: '', text: '' });
 
-        const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-        try {
-            // 2. Configuración con Token (Solo el Admin tiene permiso)
-            const config = {
-                headers: { 'Authorization': `Bearer ${token}` }
-            };
+    try {
+        // CONFIGURACIÓN CORRECTA SEGÚN TU MIDDLEWARE
+        const config = {
+            headers: { 
+                // Así es como lo busca tu función 'proteger'
+                'Authorization': `Bearer ${token}` 
+            }
+        };
 
-            // 3. Petición al endpoint de registro
-            // Ajusta la URL si tienes un endpoint específico como /api/auth/register-worker
-            await axios.post(
-                'https://proyectosanfranciscoasis.onrender.com/api/auth/register', 
-                formData, 
-                config
-            );
+        const res = await axios.post(
+            'http://localhost:10000/api/auth/register-worker', 
+            formData, 
+            config
+        );
 
-            setMessage({ type: 'success', text: '¡Personal registrado con éxito! 👥' });
-            setFormData({ nombre: '', email: '', password: '', rol: 'vendedor' }); 
-            
-        } catch (err) {
-            console.error(err);
-            const errorMsg = err.response?.data?.msg || "Error al conectar con el servidor";
-            setMessage({ type: 'error', text: errorMsg });
-        } finally {
-            setLoading(false);
-        }
-    };
+        setMessage({ type: 'success', text: res.data.msg || '¡Personal registrado! 👥' });
+        setFormData({ nombre: '', email: '', password: '', rol: 'trabajador' }); 
+        
+    } catch (err) {
+        console.error("Error Auth:", err.response?.data);
+        const errorMsg = err.response?.data?.msg || "Acceso denegado";
+        setMessage({ type: 'error', text: errorMsg });
+    } finally {
+        setLoading(false);
+    }
+};
+
+
+
 
     return (
         <div className="worker-management-container">
-            <h3 style={{ color: '#00d4ff', marginBottom: '20px' }}>👥 Registro de Personal</h3>
+            <h3 style={{ color: '#00d4ff', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <FaUserPlus /> Registro de Personal
+            </h3>
             
+            {/* Sistema de Alertas Visuales */}
             {message.text && (
-                <div className={`alert-box ${message.type === 'success' ? 'alert-ok' : 'alert-error'}`}>
+                <div className={`alert-box ${message.type === 'success' ? 'alert-ok' : 'alert-error'}`} 
+                     style={{ 
+                        padding: '15px', 
+                        borderRadius: '8px', 
+                        marginBottom: '20px',
+                        backgroundColor: message.type === 'success' ? 'rgba(0, 255, 136, 0.1)' : 'rgba(255, 77, 77, 0.1)',
+                        color: message.type === 'success' ? '#00ff88' : '#ff4d4d',
+                        border: `1px solid ${message.type === 'success' ? '#00ff88' : '#ff4d4d'}`
+                     }}>
                     {message.text}
                 </div>
             )}
@@ -88,8 +105,8 @@ const WorkerManagement = () => {
                 <div className="form-group">
                     <label>Rol del Usuario</label>
                     <select name="rol" value={formData.rol} onChange={handleChange}>
-                        <option value="vendedor">Vendedor / Trabajador</option>
-                        <option value="admin">Administrador (Cuidado)</option>
+                        <option value="trabajador">Trabajador</option>
+                        <option value="admin">Administrador</option>
                     </select>
                 </div>
 
@@ -97,15 +114,27 @@ const WorkerManagement = () => {
                     type="submit" 
                     className="btn-primary" 
                     disabled={loading}
-                    style={{ marginTop: '10px' }}
+                    style={{ 
+                        marginTop: '10px', 
+                        padding: '12px', 
+                        backgroundColor: '#00d4ff', 
+                        color: '#000', 
+                        fontWeight: 'bold',
+                        cursor: loading ? 'not-allowed' : 'pointer',
+                        border: 'none',
+                        borderRadius: '5px'
+                    }}
                 >
-                    {loading ? "Registrando..." : "Confirmar Alta de Personal"}
+                    {loading ? "PROCESANDO..." : "CONFIRMAR ALTA"}
                 </button>
             </form>
 
-            <div className="worker-list-preview">
-                <h4>Estatus del Módulo</h4>
-                <p>⚠️ El sistema de auditoría registrará este alta bajo tu usuario: <strong>{localStorage.getItem('userName')}</strong></p>
+            <div className="worker-list-preview" style={{ marginTop: '30px', padding: '15px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px' }}>
+                <h4 style={{ fontSize: '0.9rem', color: '#888' }}>Estatus del Módulo</h4>
+                <p style={{ fontSize: '0.8rem', color: '#aaa' }}>
+                    <FaShieldAlt style={{ color: '#ffa500', marginRight: '5px' }} /> 
+                    Auditoría activa: Registrando como <strong>{localStorage.getItem('userName') || 'Admin'}</strong>
+                </p>
             </div>
         </div>
     );

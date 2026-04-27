@@ -4,46 +4,46 @@ const RepuestoSchema = new mongoose.Schema({
     codigo: {
         type: String,
         required: [true, 'El código o SKU es obligatorio'],
-        unique: true, // Esto evita duplicados en San Francisco de Asís
+        unique: true, 
         trim: true,
-        uppercase: true // Guarda siempre en mayúsculas para consistencia
+        uppercase: true 
     },
     nombre: {
         type: String,
-        required: [true, 'El nombre del repuesto es obligatorio'],
+        default: 'Nuevo Repuesto',
         trim: true
     },
     descripcion: {
         type: String,
-        trim: true
+        trim: true,
+        default: ''
     },
     categoria: {
         type: String,
-        required: [true, 'La categoría es obligatoria'],
-        enum: ['Motor', 'Frenos', 'Suspension', 'Electricidad', 'Carroceria', 'Otros'],
-        default: 'Motor'
+        default: 'Otros'
     },
     marcaCarro: {
         type: String,
-        required: [true, 'La marca del vehículo es obligatoria'],
+        default: 'Universal',
         trim: true
     },
     modeloCarro: {
         type: String,
-        required: [true, 'El modelo del vehículo es obligatorio'],
+        default: 'N/A',
         trim: true
     },
     anioCompatibilidad: {
-        desde: { type: Number, min: 1950 },
-        hasta: { type: Number, max: new Date().getFullYear() + 1 }
+        desde: { type: Number, default: 2000 },
+        hasta: { type: Number, default: new Date().getFullYear() }
     },
     precioVenta: {
         type: Number,
-        required: [true, 'El precio de venta es obligatorio'],
+        default: 0,
         min: [0, 'El precio no puede ser negativo']
     },
     costoCompra: {
         type: Number,
+        default: 0,
         min: [0, 'El costo no puede ser negativo']
     },
     stock: {
@@ -57,22 +57,29 @@ const RepuestoSchema = new mongoose.Schema({
     },
     ubicacionPasillo: {
         type: String,
-        trim: true
+        trim: true,
+        default: 'Almacén'
     },
     imagenUrl: {
         type: String,
         default: 'https://via.placeholder.com/150?text=Sin+Imagen' 
     }
 }, { 
-    timestamps: true // Esto crea 'createdAt' y 'updatedAt' automáticamente
+    timestamps: true 
 });
 
-// Middleware opcional: Validar que el precio de venta sea mayor al costo
-RepuestoSchema.pre('save', function(next) {
+/**
+ * MIDDLEWARE PRE-SAVE
+ * CORRECCIÓN: Se elimina el argumento 'next'. 
+ * En versiones actuales de Mongoose, si la función es síncrona, no se debe llamar a next().
+ */
+RepuestoSchema.pre('save', function() {
     if (this.precioVenta <= this.costoCompra) {
-        console.warn('Alerta: El precio de venta es menor o igual al costo de compra.');
+        console.warn(`[!] Alerta en ${this.codigo}: Precio de venta ($${this.precioVenta}) no deja margen de ganancia.`);
     }
-    next();
+    // Ya no hay llamada a next(), Mongoose continúa automáticamente al terminar la función.
 });
 
-module.exports = mongoose.model('Repuesto', RepuestoSchema);
+//module.exports = mongoose.model('Repuesto', RepuestoSchema, 'repuestos');
+// Busca si el modelo ya existe en la instancia de mongoose, de lo contrario lo crea
+module.exports = mongoose.models.Repuesto || mongoose.model('Repuesto', RepuestoSchema, 'repuestos');
